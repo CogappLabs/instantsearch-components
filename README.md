@@ -14,7 +14,7 @@ Docs: https://cogapplabs.github.io/instantsearch-components/
 Not on npm. Install a tagged release from GitHub, which npm builds on install:
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.1.0
+npm install github:CogappLabs/instantsearch-components#v0.2.0
 ```
 
 ```tsx
@@ -23,6 +23,11 @@ import "@cogapplabs/instantsearch-components/date-histogram.css";
 ```
 
 Peer dependencies: `react` 18 or later and `react-instantsearch` 7 or later.
+The package is ES modules only.
+
+npm builds `dist/` when it installs from GitHub, so an install run with
+`--ignore-scripts`, or by a package manager that blocks dependency build
+scripts (pnpm 10 without an allow-list entry), gets no `dist/`.
 
 ## Versions
 
