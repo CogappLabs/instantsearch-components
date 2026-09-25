@@ -14,7 +14,7 @@ for collection search and kept here so more than one project can use them.
 Not on npm. Install a tagged release from GitHub, which npm builds on install:
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.3.0
+npm install github:CogappLabs/instantsearch-components#v0.4.0
 ```
 
 ```tsx
@@ -31,16 +31,18 @@ scripts (pnpm 10 without an allow-list entry), gets no `dist/`.
 
 ## Without npm
 
-A script-tag build for pages loading React 18 and React InstantSearch from a
-CDN, served by jsDelivr from each tag:
+Script-tag builds, served by jsDelivr from each tag, for pages that load
+InstantSearch from a CDN:
 
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.css" />
-<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.min.js"></script>
-```
+- **InstantSearch.js** pages: `cdn/instantsearch-js.min.js` adds
+  `CogappInstantSearch.dateHistogram({ container, attribute })`, a widget used
+  like `instantsearch.widgets.refinementList`. It needs no React.
+- **React InstantSearch** pages (React 18 as script tags):
+  `cdn/react-instantsearch.min.js` adds `DateHistogram`.
 
-It adds `window.DateHistogram` and `window.CogappInstantSearch`. See
-[Script tags](https://cogapplabs.github.io/instantsearch-components/guides/script-tags/).
+Both take `cdn/instantsearch-components.css`, e.g.
+`https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-js.min.js`.
+See [Script tags](https://cogapplabs.github.io/instantsearch-components/guides/script-tags/).
 
 ## Versions
 

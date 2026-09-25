@@ -3,51 +3,90 @@ title: Script tags
 description: Use the components from a CDN, without npm or a build step.
 ---
 
-For a page that loads React and React InstantSearch from a CDN, there is a
-script-tag build. It uses the page's own `React` and `ReactInstantSearch`
-globals, and adds each component as a global in the same way, so
-`DateHistogram` sits beside React InstantSearch's `RefinementList`.
+Two script-tag builds, served by jsDelivr from each release tag. Pick the one
+matching what the page already loads:
 
-## Loading it
+| The page loads | Script |
+| --- | --- |
+| InstantSearch.js (`instantsearch.js`) | `cdn/instantsearch-js.min.js` |
+| React and React InstantSearch | `cdn/react-instantsearch.min.js` |
 
-After React, ReactDOM and React InstantSearch, add the script and the
-stylesheet, pinned to a release tag:
+Both use the same stylesheet, `cdn/instantsearch-components.css`. Pin every
+URL to a tag such as `@v0.4.0`: jsDelivr caches a tag for good, so a pinned
+page never changes underneath you.
+
+## InstantSearch.js
+
+Each component is a widget, added beside InstantSearch.js's own. It needs no
+React: the build carries Preact, a 4KB stand-in, to draw it.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-components.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/searchkit@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/@searchkit/instantsearch-client@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-js.min.js"></script>
+
+<div id="type"></div>
+<div id="date"></div>
+
+<script>
+  const search = instantsearch({
+    indexName: "collection",
+    searchClient: SearchkitInstantsearchClient({ url: "/api/search" }),
+  });
+
+  search.addWidgets([
+    instantsearch.widgets.refinementList({ container: "#type", attribute: "type" }),
+    CogappInstantSearch.dateHistogram({
+      container: "#date",
+      attribute: "date_start",
+      labels: { group: "Date" },
+    }),
+  ]);
+
+  search.start();
+</script>
+```
+
+`container` takes an element or a selector, and every other option is a
+prop from the [component page](../../components/date-histogram/). The script
+also sets a `dateHistogram` global, unless the page has one already.
+
+## React
+
+For a page loading React and React InstantSearch as script tags, the build
+uses the page's `React` and `ReactInstantSearch` globals and adds
+`DateHistogram` beside React InstantSearch's components. React 18 is the last
+version published as a plain script (`umd/`); React 19 loads only as ES
+modules.
 
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.css"
+  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-components.css"
 />
 
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-instantsearch@7/dist/umd/ReactInstantSearch.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@searchkit/instantsearch-client@4/dist/umd/index.global.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.min.js"></script>
-```
+<script src="https://cdn.jsdelivr.net/npm/@searchkit/instantsearch-client@4"></script>
+<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/react-instantsearch.min.js"></script>
 
-React 18 is the version to load: React 19 publishes no script-tag build.
-
-The script sets `window.DateHistogram`, unless the page already has a global
-of that name, and `window.CogappInstantSearch`, which holds every component.
-
-## Using it
-
-Without JSX, create the element with `React.createElement`. Searchkit's
-script-tag client is the `SearchkitInstantsearchClient` global, here pointed at
-a server-side Searchkit route:
-
-```html
 <div id="search"></div>
+
 <script>
   const h = React.createElement;
-  const { InstantSearch } = ReactInstantSearch;
-
   const searchClient = SearchkitInstantsearchClient({ url: "/api/search" });
 
   ReactDOM.createRoot(document.getElementById("search")).render(
     h(
-      InstantSearch,
+      ReactInstantSearch.InstantSearch,
       { searchClient, indexName: "collection" },
       h(DateHistogram, { attribute: "date_start", labels: { group: "Date" } }),
     ),
@@ -55,10 +94,5 @@ a server-side Searchkit route:
 </script>
 ```
 
-Every prop on the [component page](../../components/date-histogram/) works the
-same way here.
-
-## Versions
-
-Change `@v0.3.0` in both URLs to move to another release. jsDelivr caches a
-tag for good, so a pinned page never changes underneath you.
+The script sets `DateHistogram` unless the page has a global of that name,
+and `CogappInstantSearch` in either build holds every component.

@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.4.0
+
+- `dateHistogram`, the component as an InstantSearch.js widget, and a
+  script-tag build of it (`cdn/instantsearch-js.min.js`) that needs no React.
+- The React script-tag build is now `cdn/react-instantsearch.min.js`; v0.3.0's
+  `cdn/instantsearch-components.min.js` stays on jsDelivr at that tag.
+- `DateHistogramView`: the component without search state, which both
+  versions render.
+
 ## v0.3.0
 
 - A script-tag build in `cdn/`, for pages loading React 18 and React

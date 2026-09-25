@@ -50,15 +50,26 @@ npm 11 blocks its install script).
 - Peer range is React 18+ and `react-instantsearch` 7+: avoid types newer than
   React 18's (`SubmitEvent` is missing there).
 
-## Script-tag build
+## Three ways in
 
-`cdn/` holds a minified IIFE of every component plus one stylesheet, for
-pages that load React and React InstantSearch as UMD globals. It is built by
-`scripts/build.mjs` (esbuild), which maps `react`, `react-instantsearch` and
-`react/jsx-runtime` onto `window.React` and `window.ReactInstantSearch`; the
-entry is `src/cdn.ts`. Unlike `dist/` it is committed, because jsDelivr serves
-only files in the repo. Run `npm run build` before committing a component
-change: CI fails if `cdn/` differs from a fresh build.
+Each component is a view with no search state (`DateHistogramView`) and
+adapters that feed it:
+
+- `DateHistogram`: React InstantSearch hooks. The npm entry.
+- `dateHistogram` (`widget.tsx`): an InstantSearch.js widget, one widget
+  object over the range and refinement-list connectors, rendering the view
+  with `react-dom/client`.
+- `cdn/`: script-tag builds from `scripts/build.mjs` (esbuild), with entries
+  `src/cdn-*.ts`. `instantsearch-js.min.js` aliases React to Preact and reads
+  the connectors from `window.instantsearch`; `react-instantsearch.min.js`
+  reads `window.React` and `window.ReactInstantSearch`. Unlike `dist/`,
+  `cdn/` is committed, because jsDelivr serves only files in the repo. Run
+  `npm run build` before committing a component change: CI fails if `cdn/`
+  differs from a fresh build. Biome skips `cdn/`, as its pre-commit `--write`
+  would reformat the minified files.
+
+macOS filesystems ignore case: `dateHistogram.tsx` and `DateHistogram.tsx`
+are one file, hence `widget.tsx`.
 
 ## Releases
 
