@@ -1,0 +1,277 @@
+---
+title: DateHistogram
+description: A year range picked under a histogram of the records' years, or typed.
+---
+
+import Demo from "../../../components/Demo.tsx";
+
+A range filter for a year field. The records' years are drawn as bars, the
+range is picked with two handles under them or typed into From and To boxes,
+and the bars outside the chosen range stay visible, so a reader can see where
+to widen to.
+
+<Demo client:load />
+
+Every demo on this page runs the real component against a made-up collection
+in the browser, so the handles and year boxes work. The line under each shows
+the refinement it would send.
+
+## Usage with Searchkit
+
+Searchkit runs InstantSearch against Elasticsearch or OpenSearch. The
+component needs one numeric field holding a year per record.
+
+### Elasticsearch document
+
+```json
+{
+  "title": "The Derby Winner",
+  "date_start": 1839
+}
+```
+
+`date_start` is mapped as a number (`long` or `integer`). A `keyword` holding
+digits facets as text and gives no stats, so the component draws nothing.
+
+### Searchkit setup
+
+Give the field `type: "numeric"` in `facet_attributes`, which makes Searchkit
+ask for its stats and per-value counts:
+
+```ts
+import Searchkit from "searchkit";
+import Client from "@searchkit/instantsearch-client";
+
+const searchkit = new Searchkit({
+  connection: { host: "https://search.example.org", apiKey: "…" },
+  search_settings: {
+    search_attributes: ["title"],
+    result_attributes: ["title", "date_start"],
+    facet_attributes: [{ attribute: "date_start", field: "date_start", type: "numeric" }],
+  },
+});
+
+export const searchClient = Client(searchkit);
+```
+
+To keep the connection details off the page, run Searchkit on the server with
+`@searchkit/api` behind an API route and point `@searchkit/instantsearch-client`
+at that URL; the component is the same either way.
+
+### React
+
+```tsx
+import { InstantSearch } from "react-instantsearch";
+import { DateHistogram } from "@cogapplabs/instantsearch-components/date-histogram";
+import "@cogapplabs/instantsearch-components/date-histogram.css";
+import { searchClient } from "./searchkit";
+
+export const Search = () => (
+  <InstantSearch searchClient={searchClient} indexName="collection">
+    <DateHistogram attribute="date_start" labels={{ group: "Date" }} />
+  </InstantSearch>
+);
+```
+
+## Usage with Algolia
+
+List the attribute in `attributesForFaceting`, store it as a number, and pass
+an Algolia client instead:
+
+```tsx
+import { liteClient } from "algoliasearch/lite";
+
+const searchClient = liteClient("APP_ID", "SEARCH_KEY");
+```
+
+## What the attribute needs
+
+- **A numeric facet:** as set up above for Searchkit or Algolia.
+- **Every year counted:** the component registers a range for the bounds and
+  the filter, and a refinement list for the count of each year, asking for
+  `valueLimit` values (1000). See [the value limit](#the-value-limit).
+- **Whole years:** bins are whole years, and a typed fraction is rounded.
+- **A spread:** with fewer than two distinct years there is nothing to draw,
+  and the component renders nothing, unless the reader has set a range, when
+  the year boxes stay so they can change it.
+
+The bars keep their heights under a chosen range because InstantSearch asks for
+a refined facet's values in a second query without that facet's own filter.
+
+## Props
+
+| Prop | Default | |
+| --- | --- | --- |
+| `attribute` | | The numeric attribute to refine. |
+| `bins` | `40` | Bars drawn, at most. |
+| `scale` | `"auto"` | `"auto"` folds a long early tail into the first bar; `"linear"` spaces every bar evenly. |
+| `valueLimit` | `1000` | Distinct values asked for. |
+| `formatYear` | `-500` as `500 BCE` | Tick labels and the handles' spoken values. |
+| `formatCount` | English digits | The records total. |
+| `labels` | English | `{ group, from, to, apply, records(formatted, count), before(year) }`, for translation. |
+| `showInputs` | `true` | The From and To year boxes. |
+| `showTicks` | `true` | Year labels under the axis, the "before" label among them. |
+| `showCount` | `true` | The records total. Turn it off over a range field. |
+| `className` | | Added to the root beside `date-histogram`, to theme one instance. |
+
+Colours are not props: set the custom properties under [Theming](#theming),
+through `className` if only one instance needs them, so they can follow a
+dark theme or a hover state as a prop could not.
+
+### Showing less
+
+<Demo client:load showInputs={false} />
+
+`showInputs={false}` leaves only the handles.
+
+<Demo client:load showTicks={false} showCount={false} />
+
+`showTicks={false}` and `showCount={false}` leave the bars and the handles.
+
+### Bars
+
+<Demo client:load bins={12} />
+
+`bins={12}`: fewer, wider bars.
+
+### Scale
+
+Collections often hold a few very early records: one at 3000 BCE stretches an
+axis that is otherwise 1500 to today, and every bar crowds to the right. With
+`scale="auto"`, when the earliest 5% of records stretch the axis by more than a
+quarter, they fold into the first bar, labelled "before 1500" (rounded to a
+round year) and drawn narrower, leaving a gap where the scale changes. The
+first demo on this page does this.
+
+<Demo client:load scale="linear" />
+
+`scale="linear"` spaces every bar evenly from the earliest year to the latest,
+tail and all.
+
+### Container width
+
+The component fills its container. Tick labels are spaced by the width it is
+given, and below 15rem the Apply button takes its own row.
+
+<Demo client:load width={200} />
+
+<Demo client:load width={320} />
+
+### Translation
+
+<Demo client:load preset="german" />
+
+`formatYear`, `formatCount` and `labels`, set for German. `records` receives the
+count as a number too, for a plural rule.
+
+## Theming
+
+The stylesheet reads these custom properties, each falling back to a shade of
+`currentColor` or a system colour. Set them on `.date-histogram` or any
+ancestor:
+
+| Property | |
+| --- | --- |
+| `--date-histogram-bar` | Bars outside the range, and the track. |
+| `--date-histogram-bar-selected` | Bars inside the range. |
+| `--date-histogram-thumb` | The handles. |
+| `--date-histogram-thumb-size` | Handle diameter, `1rem`. The grab area is at least 24px either way. |
+| `--date-histogram-thumb-border` | The ring round each handle, `Canvas`. |
+| `--date-histogram-focus` | The focus ring on a handle, `Highlight`. |
+| `--date-histogram-muted` | Labels, ticks and the records total. |
+| `--date-histogram-field-border` | Year box and button borders. |
+| `--date-histogram-field-background` | Year box and button fill, transparent. |
+
+<Demo
+  client:load
+  theme={{
+    background: "#1d1f24",
+    color: "#e8e6e1",
+    "--date-histogram-bar-selected": "#f0b429",
+    "--date-histogram-thumb": "#f0b429",
+    "--date-histogram-thumb-border": "#1d1f24",
+  }}
+/>
+
+```css
+.site-search .date-histogram {
+  --date-histogram-bar-selected: #f0b429;
+  --date-histogram-thumb: #f0b429;
+  --date-histogram-thumb-border: #1d1f24;
+}
+```
+
+### How the stylesheet behaves in your site
+
+- **It stays inside the component:** every rule is scoped under a
+  `.date-histogram-*` class, and state is marked with `data-selected` and
+  `data-tail` rather than generic classes, so nothing matches a site's own
+  `.is-selected`.
+- **It is not in a cascade layer:** its one-class selectors then beat a site's
+  bare `input` and `button` rules, where a layered copy would lose to them. A
+  site that orders its CSS with layers can put it in one on import:
+
+  ```css
+  @import "@cogapplabs/instantsearch-components/date-histogram.css" layer(components);
+  ```
+
+- **It can be left out:** skip the import and style `.date-histogram-bars`,
+  `.date-histogram-handles`, `.date-histogram-ticks`, `.date-histogram-summary`
+  and `.date-histogram-form` yourself. The handles need the stacking rules in
+  the stylesheet to work at all, so copy those.
+- **It runs left to right:** under `dir="rtl"` too, as a year axis does. In
+  forced-colours mode it uses system colours.
+
+## Accessibility
+
+- The control is a `fieldset` named by `labels.group`, so a screen reader
+  announces what the range is of. Set it: "Year range" is only a fallback.
+- The handles are native range inputs, named From and To, and announce the year
+  they sit on. Each moves one bar per arrow key and searches when the key is
+  released.
+- The bars and tick labels are hidden from assistive technology, since they
+  repeat what the handles and the year boxes say.
+- The year boxes are text inputs rather than `type="number"`, whose iOS keypad
+  has no minus sign for a BCE year.
+
+## The value limit
+
+`valueLimit` becomes InstantSearch's `maxValuesPerFacet`, which applies to the
+whole search: the helper takes the largest any widget asks for, so every facet
+in every query then asks for up to 1000 values. On Algolia that is also the
+ceiling, so raising it does nothing there. On Elasticsearch it is the size of
+each terms aggregation, and costs little.
+
+An index with more distinct years than `valueLimit` loses its rarest from the
+chart.
+
+## Bounds
+
+`useRange` takes `min` and `max`, and the component deliberately does not pass
+them on: in InstantSearch they are hard bounds, applied as a filter, so a
+record outside them disappears from the results rather than folding into the
+first bar. `scale="auto"` is the way to keep outliers from squashing the chart.
+
+A typed year before the earliest record, or after the latest, leaves that end
+open: InstantSearch would otherwise ignore the whole range.
+
+## Range fields
+
+A record dated 1840 to 1860 is best matched by any range overlapping those
+years, not by its start year alone. In Elasticsearch that is an
+`integer_range` field. The component works with one if the backend returns, for
+that attribute:
+
+- a count per year covered, as a `histogram` aggregation with an interval of 1
+  gives on a range field;
+- the bounds as facet stats;
+- a filter that matches overlapping spans, which is what a `range` query on a
+  range field does by default.
+
+Set `showCount={false}` then. A record falls in every year it covers, so the
+bars' total is no record count.
+
+Searchkit asks for a `stats` aggregation on a numeric facet, which a range
+field refuses. The Collection Flow dashboard swaps it for an `exists` count in
+Searchkit's `beforeSearch` hook and rebuilds the bounds from the histogram in
+`afterSearch`.

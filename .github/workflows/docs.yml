@@ -24,6 +24,8 @@ jobs:
         with:
           path: docs
           node-version: 24
+        env:
+          DOCS_BASE: /instantsearch-components
   deploy:
     needs: build
     runs-on: ubuntu-latest

@@ -7,7 +7,7 @@ The package is not on npm. Install a tagged release straight from GitHub; npm
 runs its build as part of the install.
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.1.0
+npm install github:CogappLabs/instantsearch-components#v0.2.0
 ```
 
 It needs `react` 18 or later and `react-instantsearch` 7 or later, which your
@@ -30,7 +30,6 @@ widget.
 
 One version covers every component. Tags are `vX.Y.Z`, and the
 [changelog](https://github.com/CogappLabs/instantsearch-components/blob/main/CHANGELOG.md)
-says which component each release changed. Pin a tag rather than `main`, and
-move to a new one when you choose to.
+says which component each release changed. Pin a tag rather than `main`.
 
 Before 1.0, a minor version (0.2.0) may change a component's props.

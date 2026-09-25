@@ -1,0 +1,12 @@
+.demo {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  margin-block: 1rem;
+  padding: 1rem;
+}
+.demo-refinement {
+  color: var(--sl-color-gray-3);
+  font-family: var(--sl-font-mono);
+  font-size: 0.75rem;
+  margin-top: 0.75rem;
+}
