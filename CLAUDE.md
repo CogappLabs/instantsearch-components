@@ -50,6 +50,16 @@ npm 11 blocks its install script).
 - Peer range is React 18+ and `react-instantsearch` 7+: avoid types newer than
   React 18's (`SubmitEvent` is missing there).
 
+## Script-tag build
+
+`cdn/` holds a minified IIFE of every component plus one stylesheet, for
+pages that load React and React InstantSearch as UMD globals. It is built by
+`scripts/build.mjs` (esbuild), which maps `react`, `react-instantsearch` and
+`react/jsx-runtime` onto `window.React` and `window.ReactInstantSearch`; the
+entry is `src/cdn.ts`. Unlike `dist/` it is committed, because jsDelivr serves
+only files in the repo. Run `npm run build` before committing a component
+change: CI fails if `cdn/` differs from a fresh build.
+
 ## Releases
 
 One version for every component. Bump `version`, add a `CHANGELOG.md` entry

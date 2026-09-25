@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0
+
+- A script-tag build in `cdn/`, for pages loading React 18 and React
+  InstantSearch from a CDN. It adds `window.DateHistogram` and
+  `window.CogappInstantSearch`.
+
 ## v0.2.1
 
 - `DateHistogram`: the tick row no longer covers the lower half of each

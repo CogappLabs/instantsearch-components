@@ -14,7 +14,7 @@ for collection search and kept here so more than one project can use them.
 Not on npm. Install a tagged release from GitHub, which npm builds on install:
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.2.1
+npm install github:CogappLabs/instantsearch-components#v0.3.0
 ```
 
 ```tsx
@@ -28,6 +28,19 @@ The package is ES modules only.
 npm builds `dist/` when it installs from GitHub, so an install run with
 `--ignore-scripts`, or by a package manager that blocks dependency build
 scripts (pnpm 10 without an allow-list entry), gets no `dist/`.
+
+## Without npm
+
+A script-tag build for pages loading React 18 and React InstantSearch from a
+CDN, served by jsDelivr from each tag:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.css" />
+<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.3.0/cdn/instantsearch-components.min.js"></script>
+```
+
+It adds `window.DateHistogram` and `window.CogappInstantSearch`. See
+[Script tags](https://cogapplabs.github.io/instantsearch-components/guides/script-tags/).
 
 ## Versions
 

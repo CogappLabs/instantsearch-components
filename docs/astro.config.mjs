@@ -28,6 +28,7 @@ export default defineConfig({
       expressiveCode: { themes: ["github-light"] },
       sidebar: [
         { label: "Getting started", slug: "guides/getting-started" },
+        { label: "Script tags", slug: "guides/script-tags" },
         { label: "Components", items: [{ autogenerate: { directory: "components" } }] },
       ],
     }),
