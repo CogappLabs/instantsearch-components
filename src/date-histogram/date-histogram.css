@@ -1,0 +1,146 @@
+/* Themed by the --date-histogram-* properties, set on .date-histogram or any
+   ancestor; each falls back to a shade of currentColor. */
+/* Inset by half a thumb, so a bin edge sits under the handle's centre. */
+.date-histogram-bars {
+  box-sizing: border-box;
+  display: block;
+  height: 4rem;
+  padding: 0 calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  width: 100%;
+}
+.date-histogram-bars rect {
+  fill: var(--date-histogram-bar, color-mix(in srgb, currentColor 15%, transparent));
+}
+.date-histogram-bars rect.is-selected {
+  fill: var(--date-histogram-bar-selected, currentColor);
+}
+/* The folded tail is not one even step, so it is drawn unlike the others. */
+.date-histogram-bars rect.is-tail {
+  opacity: 0.5;
+  stroke: var(--date-histogram-bar-selected, currentColor);
+  stroke-dasharray: 2 2;
+  stroke-width: 1px;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Positioned in bins across the same inset as the bars. */
+.date-histogram-ticks {
+  color: var(--date-histogram-muted, color-mix(in srgb, currentColor 70%, transparent));
+  font-size: 0.6875rem;
+  font-variant-numeric: tabular-nums;
+  height: 1.5rem;
+  /* Up to the track, which runs through the handles' middle, so each tick
+     hangs from the axis. */
+  margin: -0.625rem calc(var(--date-histogram-thumb-size, 1rem) / 2) 0;
+  position: relative;
+}
+.date-histogram-ticks span {
+  padding-top: 0.75rem;
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+.date-histogram-ticks span::before {
+  background: currentColor;
+  content: "";
+  height: 0.5rem;
+  left: calc(50% - 0.5px);
+  position: absolute;
+  top: 0;
+  width: 1px;
+}
+.date-histogram-ticks span.is-tail {
+  left: 0;
+  transform: none;
+}
+.date-histogram-ticks span.is-tail::before {
+  left: 0;
+}
+
+/* Two range inputs on one track: only the thumbs take the pointer, so either
+   handle can be dragged where it overlaps the other's track. */
+.date-histogram-handles {
+  height: 1.25rem;
+  position: relative;
+}
+.date-histogram-handles::before {
+  background: var(--date-histogram-bar, color-mix(in srgb, currentColor 15%, transparent));
+  content: "";
+  height: 2px;
+  left: calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  position: absolute;
+  right: calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  top: calc(50% - 1px);
+}
+.date-histogram-handles input {
+  appearance: none;
+  background: none;
+  height: 100%;
+  inset: 0;
+  margin: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+.date-histogram-handles input::-webkit-slider-thumb {
+  appearance: none;
+  background: var(--date-histogram-thumb, currentColor);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: grab;
+  height: var(--date-histogram-thumb-size, 1rem);
+  pointer-events: auto;
+  width: var(--date-histogram-thumb-size, 1rem);
+}
+.date-histogram-handles input::-moz-range-thumb {
+  background: var(--date-histogram-thumb, currentColor);
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: grab;
+  height: var(--date-histogram-thumb-size, 1rem);
+  pointer-events: auto;
+  width: var(--date-histogram-thumb-size, 1rem);
+}
+
+.date-histogram-summary {
+  color: var(--date-histogram-muted, color-mix(in srgb, currentColor 70%, transparent));
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  margin: 0.25rem 0 0;
+  text-align: center;
+}
+
+.date-histogram-form {
+  align-items: flex-end;
+  display: flex;
+  font-size: 0.75rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.date-histogram-form label {
+  color: var(--date-histogram-muted, color-mix(in srgb, currentColor 70%, transparent));
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+.date-histogram-form input,
+.date-histogram-form button {
+  background: var(--date-histogram-field-background, white);
+  border: 1px solid
+    var(--date-histogram-field-border, color-mix(in srgb, currentColor 30%, transparent));
+  border-radius: 0.25rem;
+  color: inherit;
+  font: inherit;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+}
+.date-histogram-form input {
+  box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
+  width: 100%;
+}
+.date-histogram-form button {
+  cursor: pointer;
+}
