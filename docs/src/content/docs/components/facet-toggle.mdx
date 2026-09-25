@@ -1,0 +1,66 @@
+---
+title: FacetToggle
+description: A boolean field as one checkbox, with its count.
+---
+
+import ToggleDemo from "../../../components/ToggleDemo.tsx";
+
+A checkbox for a boolean field, such as "Has image" or "Open access", with the
+number of records it would leave.
+
+<ToggleDemo client:load />
+
+It exists for one Elasticsearch quirk. A boolean is filtered on `true`, but
+its aggregation buckets are keyed `1` and `0`, so InstantSearch's own
+`ToggleRefinement` looks for a `true` bucket, finds none, and shows no count.
+This one tries the `on` value, then its bucket key, so a boolean field needs no
+extra setting. On Algolia, which keys the bucket `true`, it works the same.
+
+## Usage with Searchkit
+
+The field is a `keyword`-style facet, declared as `string`, since Searchkit
+filters it with a `term` query on the refinement value:
+
+```ts
+facet_attributes: [{ attribute: "has_image", field: "has_image", type: "string" }];
+```
+
+```tsx
+import { FacetToggle } from "@cogapplabs/instantsearch-components/facet-toggle";
+import "@cogapplabs/instantsearch-components/facet-toggle.css";
+
+<FacetToggle attribute="has_image" label="Has image" />
+```
+
+With InstantSearch.js and the script-tag build, it is a widget:
+
+```js
+search.addWidgets([
+  CogappInstantSearch.facetToggle({
+    container: "#has-image",
+    attribute: "has_image",
+    label: "Has image",
+  }),
+]);
+```
+
+## Props
+
+| Prop | Default | |
+| --- | --- | --- |
+| `attribute` | | The facet to filter. |
+| `label` | | The checkbox's text. |
+| `on` | `true` | The value it filters on when ticked. |
+| `countOn` | | The bucket the count comes from, when it is neither `on` nor a boolean's `1`/`0`. |
+| `formatCount` | English digits | The count. |
+| `className` | | Added to the root beside `facet-toggle`. |
+
+## Theming
+
+| Property | |
+| --- | --- |
+| `--facet-toggle-accent` | The checkbox, through `accent-color`. |
+| `--facet-toggle-muted` | The count. |
+
+The stylesheet resets the checkbox's margin, padding and border, so a site's
+own `input` rules leave it on the label's line.

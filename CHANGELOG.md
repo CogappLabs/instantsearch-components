@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5.0
+
+- `FacetToggle` (React) and `facetToggle` (InstantSearch.js): a boolean field
+  as one checkbox with its count, read from Elasticsearch's `1` bucket where
+  InstantSearch's own toggle finds none. In both script-tag builds, with
+  `facet-toggle.css` in the shared stylesheet.
+
 ## v0.4.2
 
 - `DateHistogram`: the handles reset padding, border and the other box
