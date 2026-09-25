@@ -16,7 +16,7 @@ as ES modules, and InstantSearch.js) with the libraries from their CDNs, and
 checks that it draws, filters on typed years and moves by keyboard.
 
 Both use the same stylesheet, `cdn/instantsearch-components.css`. Pin every
-URL to a tag such as `@v0.4.0`: jsDelivr caches a tag for good, so a pinned
+URL to a tag such as `@v0.4.1`: jsDelivr caches a tag for good, so a pinned
 page never changes underneath you.
 
 ## InstantSearch.js
@@ -28,13 +28,13 @@ React: the build carries Preact, a 4KB stand-in, to draw it.
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.css@7/themes/satellite-min.css" />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-components.css"
+  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.1/cdn/instantsearch-components.css"
 />
 
 <script src="https://cdn.jsdelivr.net/npm/searchkit@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/@searchkit/instantsearch-client@4"></script>
 <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
-<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.1/cdn/instantsearch-js.min.js"></script>
 
 <div id="type"></div>
 <div id="date"></div>
@@ -58,7 +58,8 @@ React: the build carries Preact, a 4KB stand-in, to draw it.
 </script>
 ```
 
-`container` takes an element or a selector, and every other option is a
+Our script can go before or after `instantsearch.js`: it looks InstantSearch.js
+up when `dateHistogram()` runs. `container` takes an element or a selector, and every other option is a
 prop from the [component page](../../components/date-histogram/). The script
 also sets a `dateHistogram` global, unless the page has one already.
 
@@ -73,14 +74,14 @@ version published as a plain script (`umd/`); for React 19, see
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/instantsearch-components.css"
+  href="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.1/cdn/instantsearch-components.css"
 />
 
 <script src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-instantsearch@7/dist/umd/ReactInstantSearch.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@searchkit/instantsearch-client@4"></script>
-<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/react-instantsearch.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.1/cdn/react-instantsearch.min.js"></script>
 
 <div id="search"></div>
 
@@ -115,7 +116,7 @@ runs; `import()` loads it after them:
 
   Object.assign(window, { React, ReactInstantSearch });
   await import(
-    "https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/react-instantsearch.min.js"
+    "https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.1/cdn/react-instantsearch.min.js"
   );
 
   const h = React.createElement;

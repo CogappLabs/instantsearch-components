@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.1
+
+- `cdn/instantsearch-js.min.js` finds InstantSearch.js when a widget is
+  created rather than when it loads, so it works before or after
+  `instantsearch.js` on the page.
+
 ## v0.4.0
 
 - `dateHistogram`, the component as an InstantSearch.js widget, and a
