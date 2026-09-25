@@ -7,7 +7,7 @@ The package is not on npm. Install a tagged release straight from GitHub; npm
 runs its build as part of the install.
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.4.1
+npm install github:CogappLabs/instantsearch-components#v0.4.2
 ```
 
 It needs `react` 18 or later and `react-instantsearch` 7 or later, which your

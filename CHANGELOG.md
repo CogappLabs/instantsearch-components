@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.2
+
+- `DateHistogram`: the handles reset padding, border and the other box
+  properties a site's own `input` rules can set. Those shortened the track,
+  so the handles stopped short of the ends of the bars.
+
 ## v0.4.1
 
 - `cdn/instantsearch-js.min.js` finds InstantSearch.js when a widget is
