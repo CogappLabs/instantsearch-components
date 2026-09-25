@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.1
+
+- `DateHistogram`: the tick row no longer covers the lower half of each
+  handle, which left the dots hard to grab.
+
 ## v0.2.0
 
 `DateHistogram`. Breaking, for CSS or props written against v0.1.0:

@@ -50,6 +50,8 @@
   /* Up to the track, which runs through the handles' middle, so each tick
      hangs from the axis. */
   margin: calc(var(--_date-histogram-hit) / -2) calc(var(--_date-histogram-hit) / 2) 0;
+  /* Pulled up over the handles' lower half, so it must not take the pointer. */
+  pointer-events: none;
   position: relative;
 }
 .date-histogram-ticks span {
