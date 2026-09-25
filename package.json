@@ -1,9 +1,9 @@
 {
   "name": "@cogapplabs/instantsearch-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Reusable React InstantSearch components from Cogapp",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && cp src/date-histogram/date-histogram.css dist/date-histogram/",
+    "build": "node scripts/build.mjs",
     "prepare": "npm run build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -14,9 +14,12 @@
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
+    "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
+    "jsdom": "^30.1.1",
     "lefthook": "^2.1.14",
     "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-instantsearch": "^7.50.0",
     "typescript": "^7.0.2",
     "vitest": "^5.0.2"
@@ -30,11 +33,15 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./date-histogram.css": "./dist/date-histogram/date-histogram.css",
     "./date-histogram": {
       "types": "./dist/date-histogram/index.d.ts",
       "import": "./dist/date-histogram/index.js"
-    }
+    },
+    "./date-histogram.css": {
+      "types": "./dist/date-histogram/date-histogram.css.d.ts",
+      "default": "./dist/date-histogram/date-histogram.css"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist"

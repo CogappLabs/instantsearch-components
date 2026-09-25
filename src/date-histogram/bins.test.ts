@@ -26,6 +26,13 @@ describe("binValues", () => {
     const { edges } = binValues(years(2000, 2004), 2000, 2004, 40);
     expect(edges).toEqual([2000, 2001, 2002, 2003, 2004, 2005]);
   });
+
+  it("keeps the tail on a linear scale", () => {
+    const values = [{ value: -5000, count: 1 }, ...years(1500, 2025, 10)];
+    const { edges, tail } = binValues(values, -5000, 2025, 40, false);
+    expect(tail).toBe(false);
+    expect(Math.abs(edges[1] - edges[0] - (edges[2] - edges[1]))).toBeLessThanOrEqual(1);
+  });
 });
 
 describe("nearestEdge", () => {

@@ -9,10 +9,10 @@ export interface Bins {
 }
 
 /** The share of records a first bar may gather before the axis starts. */
-const TAIL_SHARE = 0.01;
+const TAIL_SHARE = 0.05;
 
 /**
- * At most `count` bins over integer values. Where the earliest 1% of records
+ * At most `count` bins over integer values. Where the earliest 5% of records
  * stretch the axis by more than a quarter, they fold into the first bin, so a
  * collection running from -5000 but mostly after 1500 is not one spike at the
  * right.
@@ -22,6 +22,7 @@ export const binValues = (
   min: number,
   max: number,
   count = 40,
+  fold = true,
 ): Bins => {
   const sorted = [...values].sort((a, b) => a.value - b.value);
   const total = sorted.reduce((sum, v) => sum + v.count, 0);
@@ -35,7 +36,7 @@ export const binValues = (
       break;
     }
   }
-  const tail = start - min > (max - start) / 4;
+  const tail = fold && start - min > (max - start) / 4;
   // A round fold point, as it becomes the tail's label: "before 1400".
   if (tail) {
     const unit = 10 ** Math.floor(Math.log10(Math.max(1, (max - start) / 4)));
@@ -87,9 +88,14 @@ export const ticksFor = ({ edges, tail }: Bins, count = 4): Tick[] => {
   if (rough <= 0) return [];
   const magnitude = 10 ** Math.floor(Math.log10(rough));
   // 25 and 250 read as round years, where 2.5 is no year at all.
-  const step =
-    [1, 2, 2.5, 5, 10].map((m) => m * magnitude).find((s) => Number.isInteger(s) && s >= rough) ??
-    Math.ceil(rough);
+  // The round step nearest the ideal, by ratio: always rounding up could
+  // double it, leaving one label where there is room for two.
+  const step = [1, 2, 2.5, 5, 10]
+    .map((m) => m * magnitude)
+    .filter((s) => Number.isInteger(s))
+    .reduce((best, s) =>
+      Math.abs(Math.log(s / rough)) < Math.abs(Math.log(best / rough)) ? s : best,
+    );
 
   const ticks: Tick[] = [];
   for (let year = Math.ceil(start / step) * step; year <= end; year += step) {

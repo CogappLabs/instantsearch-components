@@ -1,26 +1,44 @@
 /* Themed by the --date-histogram-* properties, set on .date-histogram or any
-   ancestor; each falls back to a shade of currentColor. */
-/* Inset by half a thumb, so a bin edge sits under the handle's centre. */
+   ancestor; each falls back to a shade of currentColor or a system colour.
+   Unlayered, so its one-class selectors beat a site's bare `input` rules; a
+   site using cascade layers picks one with `@import ... layer(name)`. */
+/* Internal, not for theming: the handle's hit size and its drawn dot. */
+.date-histogram {
+  /* The root is a fieldset, for its group semantics; not its UA box, whose
+     min-width would stop it shrinking into a narrow container. */
+  border: 0;
+  margin: 0;
+  min-width: 0;
+  padding: 0;
+  /* A year axis runs left to right in any script; native range inputs would
+     otherwise reverse under dir="rtl" while the bars did not. */
+  direction: ltr;
+  container-type: inline-size;
+  --_date-histogram-hit: max(1.5rem, calc(var(--date-histogram-thumb-size, 1rem) + 0.5rem));
+  --_date-histogram-dot: radial-gradient(
+    circle closest-side,
+    var(--date-histogram-thumb, currentColor) 0
+      calc(var(--date-histogram-thumb-size, 1rem) / 2 - 2px),
+    var(--date-histogram-thumb-border, Canvas)
+      calc(var(--date-histogram-thumb-size, 1rem) / 2 - 2px)
+      calc(var(--date-histogram-thumb-size, 1rem) / 2),
+    transparent calc(var(--date-histogram-thumb-size, 1rem) / 2)
+  );
+}
+
+/* Inset by half a handle, so a bin edge sits under the handle's centre. */
 .date-histogram-bars {
   box-sizing: border-box;
   display: block;
   height: 4rem;
-  padding: 0 calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  padding: 0 calc(var(--_date-histogram-hit) / 2);
   width: 100%;
 }
 .date-histogram-bars rect {
   fill: var(--date-histogram-bar, color-mix(in srgb, currentColor 15%, transparent));
 }
-.date-histogram-bars rect.is-selected {
+.date-histogram-bars rect[data-selected] {
   fill: var(--date-histogram-bar-selected, currentColor);
-}
-/* The folded tail is not one even step, so it is drawn unlike the others. */
-.date-histogram-bars rect.is-tail {
-  opacity: 0.5;
-  stroke: var(--date-histogram-bar-selected, currentColor);
-  stroke-dasharray: 2 2;
-  stroke-width: 1px;
-  vector-effect: non-scaling-stroke;
 }
 
 /* Positioned in bins across the same inset as the bars. */
@@ -31,7 +49,7 @@
   height: 1.5rem;
   /* Up to the track, which runs through the handles' middle, so each tick
      hangs from the axis. */
-  margin: -0.625rem calc(var(--date-histogram-thumb-size, 1rem) / 2) 0;
+  margin: calc(var(--_date-histogram-hit) / -2) calc(var(--_date-histogram-hit) / 2) 0;
   position: relative;
 }
 .date-histogram-ticks span {
@@ -49,27 +67,27 @@
   top: 0;
   width: 1px;
 }
-.date-histogram-ticks span.is-tail {
+.date-histogram-ticks span[data-tail] {
   left: 0;
   transform: none;
 }
-.date-histogram-ticks span.is-tail::before {
+.date-histogram-ticks span[data-tail]::before {
   left: 0;
 }
 
 /* Two range inputs on one track: only the thumbs take the pointer, so either
    handle can be dragged where it overlaps the other's track. */
 .date-histogram-handles {
-  height: 1.25rem;
+  height: var(--_date-histogram-hit);
   position: relative;
 }
 .date-histogram-handles::before {
   background: var(--date-histogram-bar, color-mix(in srgb, currentColor 15%, transparent));
   content: "";
   height: 2px;
-  left: calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  left: calc(var(--_date-histogram-hit) / 2);
   position: absolute;
-  right: calc(var(--date-histogram-thumb-size, 1rem) / 2);
+  right: calc(var(--_date-histogram-hit) / 2);
   top: calc(50% - 1px);
 }
 .date-histogram-handles input {
@@ -82,24 +100,45 @@
   position: absolute;
   width: 100%;
 }
+/* The thumb is the hit target, at least 24px; the dot and its ring are drawn
+   inside it, so it can be grabbed without being drawn that large. */
 .date-histogram-handles input::-webkit-slider-thumb {
   appearance: none;
-  background: var(--date-histogram-thumb, currentColor);
-  border: 2px solid white;
+  background: var(--_date-histogram-dot);
+  border: 0;
   border-radius: 50%;
   cursor: grab;
-  height: var(--date-histogram-thumb-size, 1rem);
+  height: var(--_date-histogram-hit);
   pointer-events: auto;
-  width: var(--date-histogram-thumb-size, 1rem);
+  width: var(--_date-histogram-hit);
 }
 .date-histogram-handles input::-moz-range-thumb {
-  background: var(--date-histogram-thumb, currentColor);
-  border: 2px solid white;
+  background: var(--_date-histogram-dot);
+  border: 0;
   border-radius: 50%;
   cursor: grab;
-  height: var(--date-histogram-thumb-size, 1rem);
+  height: var(--_date-histogram-hit);
   pointer-events: auto;
-  width: var(--date-histogram-thumb-size, 1rem);
+  width: var(--_date-histogram-hit);
+}
+/* Each input spans the whole track, so its own focus ring would outline both
+   handles alike; the ring goes on the focused thumb instead. */
+.date-histogram-handles input:focus-visible {
+  outline: none;
+}
+.date-histogram-handles input:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--date-histogram-focus, Highlight);
+  outline-offset: 1px;
+}
+.date-histogram-handles input:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--date-histogram-focus, Highlight);
+  outline-offset: 1px;
+}
+.date-histogram-handles input:active::-webkit-slider-thumb {
+  cursor: grabbing;
+}
+.date-histogram-handles input:active::-moz-range-thumb {
+  cursor: grabbing;
 }
 
 .date-histogram-summary {
@@ -113,6 +152,7 @@
 .date-histogram-form {
   align-items: flex-end;
   display: flex;
+  flex-wrap: wrap;
   font-size: 0.75rem;
   gap: 0.5rem;
   margin-top: 0.5rem;
@@ -120,14 +160,14 @@
 .date-histogram-form label {
   color: var(--date-histogram-muted, color-mix(in srgb, currentColor 70%, transparent));
   display: flex;
-  flex: 1;
+  flex: 1 1 4.5rem;
   flex-direction: column;
   gap: 0.125rem;
   min-width: 0;
 }
 .date-histogram-form input,
 .date-histogram-form button {
-  background: var(--date-histogram-field-background, white);
+  background: var(--date-histogram-field-background, transparent);
   border: 1px solid
     var(--date-histogram-field-border, color-mix(in srgb, currentColor 30%, transparent));
   border-radius: 0.25rem;
@@ -143,4 +183,27 @@
 }
 .date-histogram-form button {
   cursor: pointer;
+}
+
+/* Too narrow for two year boxes and the button on one row. */
+@container (max-width: 15rem) {
+  .date-histogram-form button {
+    flex: 1 0 100%;
+  }
+}
+
+/* Forced colours drop the custom ones, which can leave bars invisible. */
+@media (forced-colors: active) {
+  .date-histogram-bars rect,
+  .date-histogram-handles::before {
+    fill: GrayText;
+    background: GrayText;
+  }
+  .date-histogram-bars rect[data-selected] {
+    fill: Highlight;
+  }
+  .date-histogram {
+    --date-histogram-thumb: ButtonText;
+    --date-histogram-thumb-border: Canvas;
+  }
 }
