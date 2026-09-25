@@ -23,40 +23,65 @@ for (const dir of readdirSync("src", { withFileTypes: true })) {
   }
 }
 
-// The script-tag build in cdn/, committed so jsDelivr can serve it from a
-// tag. React and React InstantSearch are the page's own globals, loaded from
-// their UMD builds; neither ships a JSX runtime, so that maps to createElement.
-const globals = {
-  react: "module.exports = window.React;",
-  "react-instantsearch": "module.exports = window.ReactInstantSearch;",
-  "react/jsx-runtime": `
-    const R = window.React;
-    const jsx = (type, props, key) =>
-      R.createElement(type, key === undefined ? props : { ...props, key });
-    module.exports = { jsx, jsxs: jsx, Fragment: R.Fragment };`,
-};
-mkdirSync("cdn", { recursive: true });
-await build({
-  entryPoints: ["src/cdn.ts"],
-  outfile: "cdn/instantsearch-components.min.js",
+// The script-tag builds in cdn/, committed so jsDelivr can serve them from a
+// tag. Each reads what the page loaded as globals rather than bundling it.
+const pageGlobals = (globals) => ({
+  name: "page-globals",
+  setup(b) {
+    const escaped = Object.keys(globals).map((k) => k.replace(/[/.]/g, "\\$&"));
+    const filter = new RegExp(`^(${escaped.join("|")})$`);
+    b.onResolve({ filter }, (args) => ({ path: args.path, namespace: "page-globals" }));
+    b.onLoad({ filter: /.*/, namespace: "page-globals" }, (args) => ({
+      contents: globals[args.path],
+      loader: "js",
+    }));
+  },
+});
+const shared = {
   bundle: true,
   minify: true,
   format: "iife",
   target: "es2020",
   legalComments: "none",
   banner: { js: `/* @cogapplabs/instantsearch-components ${version()} | MIT */` },
+};
+rmSync("cdn", { recursive: true, force: true });
+mkdirSync("cdn");
+
+// InstantSearch.js pages: the connectors come from the page's `instantsearch`
+// global, and the view renders with Preact in place of React.
+await build({
+  ...shared,
+  entryPoints: ["src/cdn-instantsearch-js.ts"],
+  outfile: "cdn/instantsearch-js.min.js",
+  alias: {
+    react: "preact/compat",
+    "react-dom/client": "preact/compat/client",
+    "react/jsx-runtime": "preact/jsx-runtime",
+  },
   plugins: [
-    {
-      name: "page-globals",
-      setup(b) {
-        const filter = new RegExp(`^(${Object.keys(globals).join("|").replace("/", "\\/")})$`);
-        b.onResolve({ filter }, (args) => ({ path: args.path, namespace: "page-globals" }));
-        b.onLoad({ filter: /.*/, namespace: "page-globals" }, (args) => ({
-          contents: globals[args.path],
-          loader: "js",
-        }));
-      },
-    },
+    pageGlobals({
+      "instantsearch.js/es/connectors": "module.exports = window.instantsearch.connectors;",
+    }),
+  ],
+});
+
+// React pages: React and React InstantSearch are the page's UMD globals.
+// Neither ships a JSX runtime, so that maps to createElement.
+await build({
+  ...shared,
+  entryPoints: ["src/cdn-react.ts"],
+  outfile: "cdn/react-instantsearch.min.js",
+  plugins: [
+    pageGlobals({
+      react: "module.exports = window.React;",
+      "react-instantsearch": "module.exports = window.ReactInstantSearch;",
+      "react/jsx-runtime": `
+        const R = window.React;
+        const jsx = (type, props, key) =>
+          R.createElement(type, key === undefined ? props : { ...props, key });
+        module.exports = { jsx, jsxs: jsx, Fragment: R.Fragment };`,
+    }),
   ],
 });
 writeFileSync(
