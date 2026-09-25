@@ -92,12 +92,23 @@
   right: calc(var(--_date-histogram-hit) / 2);
   top: calc(50% - 1px);
 }
+/* Reset against a site's own input rules: padding or a border on a range input
+   shortens the track the thumb runs along, so it stops short of the ends and
+   no longer lines up with the bars. */
 .date-histogram-handles input {
   appearance: none;
   background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  box-sizing: border-box;
   height: 100%;
   inset: 0;
   margin: 0;
+  max-width: none;
+  min-width: 0;
+  outline-offset: 0;
+  padding: 0;
   pointer-events: none;
   position: absolute;
   width: 100%;

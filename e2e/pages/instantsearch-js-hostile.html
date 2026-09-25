@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>InstantSearch.js, with a site's own input styles</title>
+    <style>
+      /* A site-wide input rule, of the kind that stopped the handles short of the ends. */
+      input { padding: 6px 12px; border: 2px solid #999; margin: 4px; max-width: 90%; }
+    </style>
+    <link rel="stylesheet" href="/cdn/instantsearch-components.css" />
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+    <script src="/cdn/instantsearch-js.min.js"></script>
+    <script src="/pages/fake-client.js"></script>
+  </head>
+  <body>
+    <div id="search"></div>
+    <script>
+      const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
+      search.addWidgets([
+        CogappInstantSearch.dateHistogram({
+          container: "#search",
+          attribute: "year",
+          labels: { group: "Date" },
+        }),
+      ]);
+      search.start();
+    </script>
+  </body>
+</html>

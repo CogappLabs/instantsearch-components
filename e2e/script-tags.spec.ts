@@ -20,6 +20,7 @@ const pages = [
   { name: "React 19 as ES modules", file: "react-19.html" },
   { name: "InstantSearch.js", file: "instantsearch-js.html" },
   { name: "InstantSearch.js, loaded after our script", file: "instantsearch-js-first.html" },
+  { name: "InstantSearch.js, with a site's input styles", file: "instantsearch-js-hostile.html" },
 ];
 
 const open = async (page: Page, file: string) => {
@@ -61,6 +62,24 @@ for (const { name, file } of pages) {
       await page.getByRole("button", { name: "Apply" }).click();
       await expect.poll(() => lastFilters(page)).toEqual(["year>=1800", "year<=1850"]);
       await expect(page.locator("rect[data-selected]")).not.toHaveCount(40);
+    });
+
+    test("runs the handles the full width of the bars", async ({ page }) => {
+      await open(page, file);
+      // A handle's track spans its input's content box; the bars are inset by
+      // half a handle, so the two only line up when the input has no padding
+      // or border of its own.
+      const box = await page.getByRole("slider", { name: "From" }).evaluate((el) => {
+        const s = getComputedStyle(el);
+        return [s.paddingLeft, s.paddingRight, s.borderLeftWidth, s.borderRightWidth, s.marginLeft];
+      });
+      expect(box).toEqual(["0px", "0px", "0px", "0px", "0px"]);
+      const [input, bars] = await Promise.all([
+        page.getByRole("slider", { name: "From" }).boundingBox(),
+        page.locator(".date-histogram-bars").boundingBox(),
+      ]);
+      expect(input?.x).toBeCloseTo(bars?.x ?? 0, 0);
+      expect(input?.width).toBeCloseTo(bars?.width ?? 0, 0);
     });
 
     test("filters from a handle moved by keyboard", async ({ page }) => {

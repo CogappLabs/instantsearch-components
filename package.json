@@ -1,6 +1,6 @@
 {
   "name": "@cogapplabs/instantsearch-components",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Reusable React InstantSearch components from Cogapp",
   "scripts": {
     "build": "node scripts/build.mjs",
