@@ -54,6 +54,10 @@ describe("FacetToggle", () => {
     );
     fireEvent.click(box);
     await waitFor(() => expect(JSON.stringify(lastFacetFilters(log))).toContain("hasImage:true"));
+    // Ticked, the count still comes from the 1 bucket, not InstantSearch's
+    // empty entry for the refined value.
+    await waitFor(() => expect((box as HTMLInputElement).checked).toBe(true));
+    expect(document.querySelector(".facet-toggle-count")?.textContent).toBe("1,234");
   });
 });
 
@@ -70,6 +74,10 @@ describe("facetToggle widget", () => {
     );
     fireEvent.click(container.querySelector("input") as HTMLInputElement);
     await waitFor(() => expect(JSON.stringify(lastFacetFilters(log))).toContain("hasImage:true"));
+    await waitFor(() =>
+      expect((container.querySelector("input") as HTMLInputElement).checked).toBe(true),
+    );
+    expect(container.querySelector(".facet-toggle-count")?.textContent).toBe("1,234");
     search.dispose();
   });
 

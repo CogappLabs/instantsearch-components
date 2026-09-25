@@ -97,6 +97,7 @@ for (const { name, file } of pages) {
           ),
         )
         .toBe(true);
+      await expect(page.locator(".facet-toggle-count")).toHaveText("1,234");
     });
 
     test("filters from a handle moved by keyboard", async ({ page }) => {

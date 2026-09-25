@@ -26,16 +26,16 @@ describe("toggleCount", () => {
     ).toBe(9);
   });
 
-  it("prefers a bucket named for the value itself, as Algolia keys it", () => {
-    expect(
-      toggleCount(
-        [
-          { name: "true", count: 7 },
-          { name: "1", count: 42 },
-        ],
-        true,
-      ),
-    ).toBe(7);
+  it("reads a bucket named for the value itself, as Algolia keys it", () => {
+    expect(toggleCount([{ name: "true", count: 7 }], true)).toBe(7);
+  });
+
+  it("ignores the empty entry InstantSearch lists for a ticked value", () => {
+    const buckets = [
+      { name: "true", count: 0 },
+      { name: "1", count: 42 },
+    ];
+    expect(toggleCount(buckets, true)).toBe(42);
   });
 
   it("takes an explicit bucket", () => {
