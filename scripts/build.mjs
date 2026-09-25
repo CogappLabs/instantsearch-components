@@ -61,7 +61,19 @@ await build({
   },
   plugins: [
     pageGlobals({
-      "instantsearch.js/es/connectors": "module.exports = window.instantsearch.connectors;",
+      // Read when a widget is created rather than when this script runs, so it
+      // works in whichever order the page loads it and instantsearch.js.
+      "instantsearch.js/es/connectors": `
+        const connectors = () => {
+          const found = window.instantsearch && window.instantsearch.connectors;
+          if (!found) {
+            throw new Error("CogappInstantSearch: load instantsearch.js before creating a widget");
+          }
+          return found;
+        };
+        export const connectRange = (...args) => connectors().connectRange(...args);
+        export const connectRefinementList = (...args) =>
+          connectors().connectRefinementList(...args);`,
     }),
   ],
 });

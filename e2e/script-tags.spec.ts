@@ -19,6 +19,7 @@ const pages = [
   { name: "React 18 as script tags", file: "react-18.html" },
   { name: "React 19 as ES modules", file: "react-19.html" },
   { name: "InstantSearch.js", file: "instantsearch-js.html" },
+  { name: "InstantSearch.js, loaded after our script", file: "instantsearch-js-first.html" },
 ];
 
 const open = async (page: Page, file: string) => {
