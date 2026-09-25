@@ -1,6 +1,6 @@
 {
   "name": "@cogapplabs/instantsearch-components",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Reusable React InstantSearch components from Cogapp",
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -16,6 +16,7 @@
     "@biomejs/biome": "^2.5.14",
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
+    "esbuild": "^0.28.2",
     "jsdom": "^30.1.1",
     "lefthook": "^2.1.14",
     "react": "^19.3.0",
