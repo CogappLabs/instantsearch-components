@@ -1,6 +1,6 @@
 {
   "name": "@cogapplabs/instantsearch-components",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "Reusable React InstantSearch components from Cogapp",
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -47,7 +47,15 @@
       "types": "./dist/date-histogram/date-histogram.css.d.ts",
       "default": "./dist/date-histogram/date-histogram.css"
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./facet-toggle": {
+      "types": "./dist/facet-toggle/index.d.ts",
+      "import": "./dist/facet-toggle/index.js"
+    },
+    "./facet-toggle.css": {
+      "types": "./dist/facet-toggle/facet-toggle.css.d.ts",
+      "default": "./dist/facet-toggle/facet-toggle.css"
+    }
   },
   "files": [
     "dist"

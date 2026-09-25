@@ -7,6 +7,7 @@
     <script src="/pages/fake-client.js"></script>
   </head>
   <body>
+    <div id="toggle"></div>
     <div id="search"></div>
     <script type="module">
       import React from "https://esm.sh/react@19";
@@ -21,6 +22,7 @@
         h(
           ReactInstantSearch.InstantSearch,
           { searchClient: fakeClient, indexName: "demo" },
+          h(FacetToggle, { attribute: "hasImage", label: "Has image" }),
           h(DateHistogram, { attribute: "year", labels: { group: "Date" } }),
         ),
       );

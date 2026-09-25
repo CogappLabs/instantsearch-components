@@ -73,7 +73,9 @@ await build({
         };
         export const connectRange = (...args) => connectors().connectRange(...args);
         export const connectRefinementList = (...args) =>
-          connectors().connectRefinementList(...args);`,
+          connectors().connectRefinementList(...args);
+        export const connectToggleRefinement = (...args) =>
+          connectors().connectToggleRefinement(...args);`,
     }),
   ],
 });

@@ -7,6 +7,9 @@ const years = Object.keys(counts).map(Number);
 window.fakeClient = {
   search: async (requests) => {
     window.searches.push(...requests.map((r) => r.params?.numericFilters ?? []));
+    window.facetSearches = (window.facetSearches ?? []).concat(
+      requests.map((r) => JSON.stringify(r.params?.facetFilters ?? [])),
+    );
     return {
       results: requests.map(() => ({
         hits: [],
@@ -18,7 +21,7 @@ window.fakeClient = {
         exhaustiveNbHits: true,
         query: "",
         params: "",
-        facets: { year: counts },
+        facets: { year: counts, hasImage: { 1: 1234, 0: 56 } },
         facets_stats: {
           year: { min: Math.min(...years), max: Math.max(...years), avg: 0, sum: 0 },
         },

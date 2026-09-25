@@ -5,8 +5,18 @@
  */
 import { binValues, nearestEdge, ticksFor } from "./date-histogram/bins.js";
 import { dateHistogram } from "./date-histogram/widget.js";
+import { toggleCount } from "./facet-toggle/count.js";
+import { facetToggle } from "./facet-toggle/widget.js";
 
 const page = window as unknown as Record<string, unknown>;
-page.CogappInstantSearch = { dateHistogram, binValues, nearestEdge, ticksFor };
+page.CogappInstantSearch = {
+  dateHistogram,
+  facetToggle,
+  binValues,
+  nearestEdge,
+  ticksFor,
+  toggleCount,
+};
 // Only where the page has no global of that name already.
 page.dateHistogram ??= dateHistogram;
+page.facetToggle ??= facetToggle;

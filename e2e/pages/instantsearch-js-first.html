@@ -9,10 +9,12 @@
     <script src="/pages/fake-client.js"></script>
   </head>
   <body>
+    <div id="toggle"></div>
     <div id="search"></div>
     <script>
       const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
       search.addWidgets([
+        CogappInstantSearch.facetToggle({ container: "#toggle", attribute: "hasImage", label: "Has image" }),
         CogappInstantSearch.dateHistogram({
           container: "#search",
           attribute: "year",

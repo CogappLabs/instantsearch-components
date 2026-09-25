@@ -1,0 +1,30 @@
+/* Themed by the --facet-toggle-* properties, set on .facet-toggle or any
+   ancestor; each falls back to a shade of currentColor or a system colour. */
+.facet-toggle {
+  align-items: center;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.5rem;
+}
+/* Reset against a site's own input rules, as a checkbox with padding or a
+   border sits off the label's line. */
+.facet-toggle input {
+  accent-color: var(--facet-toggle-accent, currentColor);
+  border: 0;
+  box-shadow: none;
+  height: 1rem;
+  margin: 0;
+  padding: 0;
+  width: 1rem;
+}
+.facet-toggle-count {
+  color: var(--facet-toggle-muted, color-mix(in srgb, currentColor 70%, transparent));
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+.facet-toggle-count::before {
+  content: "(";
+}
+.facet-toggle-count::after {
+  content: ")";
+}

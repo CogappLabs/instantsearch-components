@@ -82,6 +82,23 @@ for (const { name, file } of pages) {
       expect(input?.width).toBeCloseTo(bars?.width ?? 0, 0);
     });
 
+    test("counts and filters a boolean toggle", async ({ page }) => {
+      await open(page, file);
+      await expect(page.locator(".facet-toggle-count")).toHaveText("1,234");
+      await page.getByRole("checkbox", { name: /Has image/ }).check();
+      // InstantSearch follows with a query without the toggle's own filter, for
+      // its counts, so look for the filter in any query rather than the last.
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            (window as unknown as { facetSearches: string[] }).facetSearches.some((f) =>
+              f.includes("hasImage:true"),
+            ),
+          ),
+        )
+        .toBe(true);
+    });
+
     test("filters from a handle moved by keyboard", async ({ page }) => {
       await open(page, file);
       const to = page.getByRole("slider", { name: "To" });
