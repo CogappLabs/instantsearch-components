@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.5.1
+
+- `FacetToggle`: once ticked it showed 0, reading the empty entry
+  InstantSearch lists for a refined value. The `1`/`0` bucket is now read
+  first.
+
 ## v0.5.0
 
 - `FacetToggle` (React) and `facetToggle` (InstantSearch.js): a boolean field
