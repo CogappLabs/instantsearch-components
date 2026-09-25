@@ -32,6 +32,7 @@ component needs one numeric field holding a year per record.
 
 `date_start` is mapped as a number (`long` or `integer`). A `keyword` holding
 digits facets as text and gives no stats, so the component draws nothing.
+For a record dated across years, see [Range fields](#range-fields).
 
 ### Searchkit setup
 
@@ -271,7 +272,74 @@ that attribute:
 Set `showCount={false}` then. A record falls in every year it covers, so the
 bars' total is no record count.
 
-Searchkit asks for a `stats` aggregation on a numeric facet, which a range
-field refuses. The Collection Flow dashboard swaps it for an `exists` count in
-Searchkit's `beforeSearch` hook and rebuilds the bounds from the histogram in
-`afterSearch`.
+### Mapping and document
+
+```json
+{ "mappings": { "properties": { "date_span": { "type": "integer_range" } } } }
+```
+
+```json
+{
+  "title": "The Derby Winner",
+  "date_span": { "gte": 1839, "lte": 1845 }
+}
+```
+
+### Searchkit setup
+
+The facet counts with a per-year `histogram` in place of Searchkit's terms
+aggregation. Searchkit's own `range` filter needs no change.
+
+```ts
+const facet_attributes = [
+  {
+    attribute: "date_span",
+    field: "date_span",
+    type: "numeric",
+    facetQuery: (field: string) => ({
+      histogram: { field, interval: 1, min_doc_count: 1 },
+    }),
+    facetResponse: (agg: { buckets: { key: number; doc_count: number }[] }) =>
+      Object.fromEntries(agg.buckets.map((b) => [b.key, b.doc_count])),
+  },
+];
+```
+
+Searchkit also asks for a `stats` aggregation on every numeric facet, which a
+range field refuses. Swap it in `beforeSearch` for a count of records with the
+field, and rebuild the bounds from the histogram in `afterSearch`:
+
+```ts
+const hooks = {
+  beforeSearch: async (requests) =>
+    requests.map((r) => {
+      if (r.body.aggs?.["date_span$_stats"]) {
+        r.body.aggs["date_span$_stats"] = { filter: { exists: { field: "date_span" } } };
+      }
+      return r;
+    }),
+  afterSearch: async (_requests, responses) =>
+    responses.map((response) => {
+      const aggs = response.aggregations;
+      const stats = aggs?.["date_span$_stats"];
+      const years = (aggs?.["date_span$_entries"]?.buckets ?? []).map((b) => b.key);
+      if (stats && years.length) {
+        aggs["date_span$_stats"] = {
+          count: stats.doc_count,
+          min: Math.min(...years),
+          max: Math.max(...years),
+          avg: null,
+          sum: null,
+        };
+      }
+      return response;
+    }),
+};
+
+// Server side, with @searchkit/api:
+const results = await client.handleRequest(body, { hooks });
+```
+
+```tsx
+<DateHistogram attribute="date_span" showCount={false} />
+```
