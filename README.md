@@ -3,11 +3,11 @@
 React InstantSearch components from [Cogapp](https://www.cogapp.com), built
 for collection search and kept here so more than one project can use them.
 
-Docs: https://cogapplabs.github.io/instantsearch-components/
+**[Documentation and live demos](https://cogapplabs.github.io/instantsearch-components/)**
 
 | Component | |
 | --- | --- |
-| `DateHistogram` | A year range picked under a histogram of the records' years, or typed. |
+| [`DateHistogram`](https://cogapplabs.github.io/instantsearch-components/components/date-histogram/) | A year range picked under a histogram of the records' years, or typed. |
 
 ## Install
 
