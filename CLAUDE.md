@@ -14,6 +14,7 @@ npm test                                  # vitest, all tests
 npx vitest run src/date-histogram/bins    # one file
 npm run typecheck
 npm run check                             # biome
+npm run test:e2e                          # Playwright: cdn/ on React 18, React 19 and InstantSearch.js pages
 npm run build                             # scripts/build.mjs: tsc to dist/, plus each CSS file and its d.ts
 cd docs && npm install && npm run build   # the Starlight site
 ```
@@ -67,6 +68,11 @@ adapters that feed it:
   `npm run build` before committing a component change: CI fails if `cdn/`
   differs from a fresh build. Biome skips `cdn/`, as its pre-commit `--write`
   would reformat the minified files.
+
+`e2e/` loads each `cdn/` build on a page of the kind it is for, from
+`e2e/pages/`, with the libraries from their real CDNs and a fake search
+client. Playwright serves the local files by route, so run `npm run build`
+first. Run `npx playwright install chromium` once.
 
 macOS filesystems ignore case: `dateHistogram.tsx` and `DateHistogram.tsx`
 are one file, hence `widget.tsx`.

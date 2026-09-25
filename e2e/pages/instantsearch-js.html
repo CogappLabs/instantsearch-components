@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>InstantSearch.js, script tags</title>
+    <link rel="stylesheet" href="/cdn/instantsearch-components.css" />
+    <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@4"></script>
+    <script src="/cdn/instantsearch-js.min.js"></script>
+    <script src="/pages/fake-client.js"></script>
+  </head>
+  <body>
+    <div id="search"></div>
+    <script>
+      const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
+      search.addWidgets([
+        CogappInstantSearch.dateHistogram({
+          container: "#search",
+          attribute: "year",
+          labels: { group: "Date" },
+        }),
+      ]);
+      search.start();
+    </script>
+  </body>
+</html>

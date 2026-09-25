@@ -11,6 +11,10 @@ matching what the page already loads:
 | InstantSearch.js (`instantsearch.js`) | `cdn/instantsearch-js.min.js` |
 | React and React InstantSearch | `cdn/react-instantsearch.min.js` |
 
+CI loads each build on a page of its kind (React 18 as script tags, React 19
+as ES modules, and InstantSearch.js) with the libraries from their CDNs, and
+checks that it draws, filters on typed years and moves by keyboard.
+
 Both use the same stylesheet, `cdn/instantsearch-components.css`. Pin every
 URL to a tag such as `@v0.4.0`: jsDelivr caches a tag for good, so a pinned
 page never changes underneath you.

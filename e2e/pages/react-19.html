@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>React 19, ES modules</title>
+    <link rel="stylesheet" href="/cdn/instantsearch-components.css" />
+    <script src="/pages/fake-client.js"></script>
+  </head>
+  <body>
+    <div id="search"></div>
+    <script type="module">
+      import React from "https://esm.sh/react@19";
+      import * as ReactDOMClient from "https://esm.sh/react-dom@19/client?deps=react@19";
+      import * as ReactInstantSearch from "https://esm.sh/react-instantsearch@7?deps=react@19,react-dom@19";
+
+      Object.assign(window, { React, ReactInstantSearch });
+      await import("/cdn/react-instantsearch.min.js");
+
+      const h = React.createElement;
+      ReactDOMClient.createRoot(document.getElementById("search")).render(
+        h(
+          ReactInstantSearch.InstantSearch,
+          { searchClient: fakeClient, indexName: "demo" },
+          h(DateHistogram, { attribute: "year", labels: { group: "Date" } }),
+        ),
+      );
+    </script>
+  </body>
+</html>

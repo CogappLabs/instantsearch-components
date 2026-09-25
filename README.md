@@ -55,6 +55,7 @@ component each release touched. Pin a tag rather than `main`.
 npm install
 npm test
 npm run build
+npm run test:e2e   # the script-tag builds in a browser; npx playwright install chromium first
 ```
 
 The docs site is in `docs/`, an Astro Starlight project with its own

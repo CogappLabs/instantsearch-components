@@ -7,13 +7,15 @@
     "prepare": "npm run build",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "check": "biome check ."
+    "check": "biome check .",
+    "test:e2e": "playwright test"
   },
   "author": "Cogapp",
   "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "^2.5.14",
+    "@playwright/test": "^1.63.0",
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",

@@ -29,3 +29,18 @@ jobs:
       # cdn/ is committed for jsDelivr, so it must match the source it was built from.
       - if: matrix.react == 19
         run: git diff --exit-code -- cdn && test -z "$(git status --porcelain -- cdn)"
+
+  # The cdn/ builds on real pages: React 18 script tags, React 19 ES modules
+  # and InstantSearch.js, each loading its libraries from public CDNs.
+  script-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
