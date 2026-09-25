@@ -63,8 +63,8 @@ also sets a `dateHistogram` global, unless the page has one already.
 For a page loading React and React InstantSearch as script tags, the build
 uses the page's `React` and `ReactInstantSearch` globals and adds
 `DateHistogram` beside React InstantSearch's components. React 18 is the last
-version published as a plain script (`umd/`); React 19 loads only as ES
-modules.
+version published as a plain script (`umd/`); for React 19, see
+[below](#react-19).
 
 ```html
 <link
@@ -96,3 +96,34 @@ modules.
 
 The script sets `DateHistogram` unless the page has a global of that name,
 and `CogappInstantSearch` in either build holds every component.
+
+### React 19
+
+React 19 loads from a CDN as ES modules only. Put React and React
+InstantSearch on `window` before loading the script, which reads them as it
+runs; `import()` loads it after them:
+
+```html
+<script type="module">
+  import React from "https://esm.sh/react@19";
+  import * as ReactDOMClient from "https://esm.sh/react-dom@19/client?deps=react@19";
+  import * as ReactInstantSearch from "https://esm.sh/react-instantsearch@7?deps=react@19,react-dom@19";
+
+  Object.assign(window, { React, ReactInstantSearch });
+  await import(
+    "https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.4.0/cdn/react-instantsearch.min.js"
+  );
+
+  const h = React.createElement;
+  ReactDOMClient.createRoot(document.getElementById("search")).render(
+    h(
+      ReactInstantSearch.InstantSearch,
+      { searchClient, indexName: "collection" },
+      h(DateHistogram, { attribute: "date_start" }),
+    ),
+  );
+</script>
+```
+
+`?deps=` makes esm.sh build React InstantSearch against the same React the
+page imports: two copies of React break its hooks.
