@@ -64,12 +64,29 @@ search.addWidgets([
 | `formatCount` | English digits | A node's count. |
 | `labels` | English | `search`, `showMore`, `showLess`, `noMatches`, and `expand(name)` for a branch's open button. |
 | `className` | | Added to the root beside `hierarchy-list`. |
+| `classNames` | | `searchForm`, `searchInput` and `showMore`: classes added beside the component's own, to match a theme's. |
 
 The path helpers are exported too, for controls built around the tree:
 `leafOf`, `parentOf`, `withToggled` (the ticked paths after toggling one) and
 `toggledIn`, which applies it through `setIndexUiState`.
 
 ## Theming
+
+To match InstantSearch's satellite theme, pass its classes:
+
+```tsx
+<HierarchyList
+  attribute="place"
+  classNames={{
+    searchForm: "ais-SearchBox-form",
+    searchInput: "ais-SearchBox-input",
+    showMore: "ais-RefinementList-showMore",
+  }}
+/>
+```
+
+The component's own look for those three is drawn under `:where()`, so the
+classes passed always win.
 
 | Property | |
 | --- | --- |
