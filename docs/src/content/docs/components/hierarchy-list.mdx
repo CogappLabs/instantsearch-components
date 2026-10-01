@@ -1,0 +1,79 @@
+---
+title: HierarchyList
+description: A hierarchical facet as nested checkboxes, any number ticked at once.
+---
+
+import HierarchyDemo from "../../../components/HierarchyDemo.tsx";
+
+A tree of checkboxes over cumulative paths such as `Europe > France > Paris`,
+with a count on every node. Any number of nodes can be ticked, and they are
+ORed. InstantSearch's own `HierarchicalMenu` takes one path at a time.
+
+<HierarchyDemo client:load />
+
+Ticking a node replaces a ticked ancestor (narrowing) or ticked descendants
+(widening), since a path ORed with its own ancestor adds nothing. A ticked
+node keeps its branch open and marks each ancestor's checkbox as mixed. Past
+`branchLimit` nodes a branch folds behind "Show more", and past that many paths
+in all a search box filters the tree by name, ignoring case and accents.
+
+## The data
+
+One attribute holding each record's path and every ancestor's, as a plain
+refinement list facet:
+
+```json
+{ "place": ["Europe", "Europe > France", "Europe > France > Paris"] }
+```
+
+The component asks for `valueLimit` paths (1000 by default) across every
+level at once, so that must cover them all: past it the rarest drop out, and
+a path whose parent dropped out has nowhere to hang.
+
+## Usage with Searchkit
+
+A `keyword` field holding the paths, as a `string` facet:
+
+```ts
+facet_attributes: [{ attribute: "place", field: "place_paths", type: "string" }];
+```
+
+```tsx
+import { HierarchyList } from "@cogapplabs/instantsearch-components/hierarchy-list";
+import "@cogapplabs/instantsearch-components/hierarchy-list.css";
+
+<HierarchyList attribute="place" labels={{ search: "Search places" }} />
+```
+
+With InstantSearch.js and the script-tag build, it is a widget:
+
+```js
+search.addWidgets([
+  CogappInstantSearch.hierarchyList({ container: "#place", attribute: "place" }),
+]);
+```
+
+## Props
+
+| Prop | Default | |
+| --- | --- | --- |
+| `attribute` | | The facet holding the paths. |
+| `separator` | `" > "` | Between a path's steps. |
+| `valueLimit` | `1000` | Paths asked for, across every level. |
+| `branchLimit` | `8` | Nodes shown per branch before "Show more". |
+| `formatCount` | English digits | A node's count. |
+| `labels` | English | `search`, `showMore`, `showLess`, `noMatches`, and `expand(name)` for a branch's open button. |
+| `className` | | Added to the root beside `hierarchy-list`. |
+
+The path helpers are exported too, for controls built around the tree:
+`leafOf`, `parentOf`, `withToggled` (the ticked paths after toggling one) and
+`toggledIn`, which applies it through `setIndexUiState`.
+
+## Theming
+
+| Property | |
+| --- | --- |
+| `--hierarchy-list-accent` | The checkboxes and "Show more". |
+| `--hierarchy-list-muted` | Counts, the open buttons and "No matches". |
+| `--hierarchy-list-border` | The search box. |
+| `--hierarchy-list-indent` | Each level's indent. |
