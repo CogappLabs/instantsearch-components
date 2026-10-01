@@ -15,6 +15,16 @@ export interface HierarchyListLabels {
   expand: (name: string) => string;
 }
 
+/**
+ * Classes added beside the component's own, as InstantSearch's widgets take
+ * `classNames`, so the search box and "Show more" can match a theme's.
+ */
+export interface HierarchyListClassNames {
+  searchForm: string;
+  searchInput: string;
+  showMore: string;
+}
+
 export interface HierarchyListProps {
   /** An attribute holding every cumulative path of a record, ancestors too. */
   attribute: string;
@@ -25,6 +35,7 @@ export interface HierarchyListProps {
   branchLimit?: number;
   formatCount?: (count: number) => string;
   labels?: Partial<HierarchyListLabels>;
+  classNames?: Partial<HierarchyListClassNames>;
   /** Added to the root, beside `hierarchy-list`, to theme one instance. */
   className?: string;
 }
@@ -36,6 +47,8 @@ const defaultLabels: HierarchyListLabels = {
   noMatches: "No matches",
   expand: (name) => `Within ${name}`,
 };
+
+const withClass = (own: string, extra?: string) => (extra ? `${own} ${extra}` : own);
 
 /** A fixed locale, so server and client render the same digits. */
 const englishCount = new Intl.NumberFormat("en");
@@ -49,10 +62,21 @@ interface LevelProps {
   branchLimit: number;
   formatCount: (count: number) => string;
   labels: HierarchyListLabels;
+  showMoreClass: string;
 }
 
 const Level = (props: LevelProps) => {
-  const { nodes, onToggle, opened, setOpen, searching, branchLimit, formatCount, labels } = props;
+  const {
+    nodes,
+    onToggle,
+    opened,
+    setOpen,
+    searching,
+    branchLimit,
+    formatCount,
+    labels,
+    showMoreClass,
+  } = props;
   const [showAll, setShowAll] = useState(false);
   // A ticked node past the limit stays in view, so a selection is never hidden.
   const shown = showAll
@@ -111,7 +135,7 @@ const Level = (props: LevelProps) => {
         })}
       </ul>
       {showAll || shown.length < nodes.length ? (
-        <button type="button" className="hierarchy-list-more" onClick={() => setShowAll((v) => !v)}>
+        <button type="button" className={showMoreClass} onClick={() => setShowAll((v) => !v)}>
           {showAll ? labels.showLess : labels.showMore}
         </button>
       ) : null}
@@ -134,6 +158,7 @@ export const HierarchyListView = ({
   branchLimit = 8,
   formatCount = (n) => englishCount.format(n),
   labels: labelProps,
+  classNames = {},
   className,
 }: Omit<HierarchyListProps, "attribute" | "valueLimit"> & {
   items: readonly HierarchyItem[];
@@ -149,15 +174,20 @@ export const HierarchyListView = ({
   const nodes = folded ? matching(tree, folded) : tree;
 
   return (
-    <div className={className ? `hierarchy-list ${className}` : "hierarchy-list"}>
+    <div className={withClass("hierarchy-list", className)}>
       {items.length > branchLimit || query ? (
-        <input
-          type="search"
-          className="hierarchy-list-search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label={labels.search}
-        />
+        <form
+          className={withClass("hierarchy-list-search-form", classNames.searchForm)}
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <input
+            type="search"
+            className={withClass("hierarchy-list-search", classNames.searchInput)}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label={labels.search}
+          />
+        </form>
       ) : null}
       {nodes.length ? (
         <Level
@@ -169,6 +199,7 @@ export const HierarchyListView = ({
           branchLimit={branchLimit}
           formatCount={formatCount}
           labels={labels}
+          showMoreClass={withClass("hierarchy-list-more", classNames.showMore)}
         />
       ) : (
         <p className="hierarchy-list-empty" role="status">

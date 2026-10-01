@@ -1,13 +1,17 @@
 /* Themed by the --hierarchy-list-* properties, set on .hierarchy-list or any
-   ancestor; each falls back to a shade of currentColor or a system colour. */
-.hierarchy-list-search {
+   ancestor; each falls back to a shade of currentColor or a system colour.
+   The search box and "Show more" are drawn under :where(), so a theme's
+   classes passed through `classNames` win over them. */
+.hierarchy-list-search-form {
+  margin: 0 0 0.5rem;
+}
+:where(.hierarchy-list-search) {
   background: transparent;
   border: 1px solid var(--hierarchy-list-border, color-mix(in srgb, currentColor 30%, transparent));
   border-radius: 0.25rem;
   box-sizing: border-box;
   color: inherit;
   font: inherit;
-  margin: 0 0 0.5rem;
   padding: 0.25rem 0.5rem;
   width: 100%;
 }
@@ -84,7 +88,7 @@
 .hierarchy-list-children {
   margin-left: var(--hierarchy-list-indent, 1.5rem);
 }
-.hierarchy-list-more {
+:where(.hierarchy-list-more) {
   background: transparent;
   border: 0;
   color: var(--hierarchy-list-accent, currentColor);
