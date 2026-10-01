@@ -11,3 +11,4 @@ page.CogappInstantSearch = components;
 // Only where the page has no global of that name already.
 page.DateHistogram ??= components.DateHistogram;
 page.FacetToggle ??= components.FacetToggle;
+page.HierarchyList ??= components.HierarchyList;

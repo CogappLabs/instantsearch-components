@@ -100,6 +100,25 @@ for (const { name, file } of pages) {
       await expect(page.locator(".facet-toggle-count")).toHaveText("1,234");
     });
 
+    test("opens a hierarchy branch and narrows to a child", async ({ page }) => {
+      await open(page, file);
+      const facetSearched = (filter: string) =>
+        page.evaluate(
+          (f) =>
+            (window as unknown as { facetSearches: string[] }).facetSearches.some((s) =>
+              s.includes(f),
+            ),
+          filter,
+        );
+      await page.getByRole("checkbox", { name: /Europe/ }).check();
+      await expect.poll(() => facetSearched('"place:Europe"')).toBe(true);
+      await page.getByRole("checkbox", { name: /France/ }).check();
+      await expect.poll(() => facetSearched('"place:Europe > France"')).toBe(true);
+      await expect(page.getByRole("checkbox", { name: /Europe/ })).not.toBeChecked();
+      await page.getByRole("button", { name: "Within Europe" }).click();
+      await expect(page.getByRole("checkbox", { name: /France/ })).toBeHidden();
+    });
+
     test("filters from a handle moved by keyboard", async ({ page }) => {
       await open(page, file);
       const to = page.getByRole("slider", { name: "To" });

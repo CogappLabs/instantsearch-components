@@ -7,16 +7,22 @@ import { binValues, nearestEdge, ticksFor } from "./date-histogram/bins.js";
 import { dateHistogram } from "./date-histogram/widget.js";
 import { toggleCount } from "./facet-toggle/count.js";
 import { facetToggle } from "./facet-toggle/widget.js";
+import { leafOf, withToggled } from "./hierarchy-list/paths.js";
+import { hierarchyList } from "./hierarchy-list/widget.js";
 
 const page = window as unknown as Record<string, unknown>;
 page.CogappInstantSearch = {
   dateHistogram,
   facetToggle,
+  hierarchyList,
   binValues,
   nearestEdge,
   ticksFor,
   toggleCount,
+  leafOf,
+  withToggled,
 };
 // Only where the page has no global of that name already.
 page.dateHistogram ??= dateHistogram;
 page.facetToggle ??= facetToggle;
+page.hierarchyList ??= hierarchyList;

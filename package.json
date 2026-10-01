@@ -55,6 +55,14 @@
     "./facet-toggle.css": {
       "types": "./dist/facet-toggle/facet-toggle.css.d.ts",
       "default": "./dist/facet-toggle/facet-toggle.css"
+    },
+    "./hierarchy-list": {
+      "types": "./dist/hierarchy-list/index.d.ts",
+      "import": "./dist/hierarchy-list/index.js"
+    },
+    "./hierarchy-list.css": {
+      "types": "./dist/hierarchy-list/hierarchy-list.css.d.ts",
+      "default": "./dist/hierarchy-list/hierarchy-list.css"
     }
   },
   "files": [

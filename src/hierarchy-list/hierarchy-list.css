@@ -1,0 +1,105 @@
+/* Themed by the --hierarchy-list-* properties, set on .hierarchy-list or any
+   ancestor; each falls back to a shade of currentColor or a system colour. */
+.hierarchy-list-search {
+  background: transparent;
+  border: 1px solid var(--hierarchy-list-border, color-mix(in srgb, currentColor 30%, transparent));
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  color: inherit;
+  font: inherit;
+  margin: 0 0 0.5rem;
+  padding: 0.25rem 0.5rem;
+  width: 100%;
+}
+.hierarchy-list-level {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hierarchy-list-row {
+  align-items: center;
+  display: flex;
+  gap: 0.25rem;
+}
+.hierarchy-list-label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.125rem 0;
+}
+/* Reset against a site's own input rules, as a checkbox with padding or a
+   border sits off the label's line. */
+.hierarchy-list-label input {
+  accent-color: var(--hierarchy-list-accent, currentColor);
+  border: 0;
+  box-shadow: none;
+  flex: none;
+  height: 1rem;
+  margin: 0;
+  padding: 0;
+  width: 1rem;
+}
+.hierarchy-list-name {
+  overflow-wrap: anywhere;
+}
+.hierarchy-list-count {
+  color: var(--hierarchy-list-muted, color-mix(in srgb, currentColor 70%, transparent));
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+.hierarchy-list-count::before {
+  content: "(";
+}
+.hierarchy-list-count::after {
+  content: ")";
+}
+.hierarchy-list-expand {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 0.25rem;
+  color: var(--hierarchy-list-muted, color-mix(in srgb, currentColor 70%, transparent));
+  cursor: pointer;
+  display: flex;
+  flex: none;
+  height: 1.5rem;
+  justify-content: center;
+  padding: 0;
+  width: 1.5rem;
+}
+.hierarchy-list-expand:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.hierarchy-list-expand svg {
+  height: 0.75rem;
+  transition: transform 0.15s;
+  width: 0.75rem;
+}
+.hierarchy-list-expand[aria-expanded="true"] svg {
+  transform: rotate(90deg);
+}
+.hierarchy-list-children {
+  margin-left: var(--hierarchy-list-indent, 1.5rem);
+}
+.hierarchy-list-more {
+  background: transparent;
+  border: 0;
+  color: var(--hierarchy-list-accent, currentColor);
+  cursor: pointer;
+  font: inherit;
+  margin: 0.25rem 0 0.5rem;
+  padding: 0;
+  text-decoration: underline;
+}
+.hierarchy-list-empty {
+  color: var(--hierarchy-list-muted, color-mix(in srgb, currentColor 70%, transparent));
+  margin: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hierarchy-list-expand svg {
+    transition: none;
+  }
+}

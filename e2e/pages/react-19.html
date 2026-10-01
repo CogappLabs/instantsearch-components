@@ -23,6 +23,7 @@
           ReactInstantSearch.InstantSearch,
           { searchClient: fakeClient, indexName: "demo" },
           h(FacetToggle, { attribute: "hasImage", label: "Has image" }),
+          h(HierarchyList, { attribute: "place" }),
           h(DateHistogram, { attribute: "year", labels: { group: "Date" } }),
         ),
       );

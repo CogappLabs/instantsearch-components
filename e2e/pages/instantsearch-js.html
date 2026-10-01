@@ -10,11 +10,13 @@
   </head>
   <body>
     <div id="toggle"></div>
+    <div id="place"></div>
     <div id="search"></div>
     <script>
       const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
       search.addWidgets([
         CogappInstantSearch.facetToggle({ container: "#toggle", attribute: "hasImage", label: "Has image" }),
+        CogappInstantSearch.hierarchyList({ container: "#place", attribute: "place" }),
         CogappInstantSearch.dateHistogram({
           container: "#search",
           attribute: "year",

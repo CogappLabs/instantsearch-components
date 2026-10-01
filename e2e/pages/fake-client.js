@@ -21,7 +21,11 @@ window.fakeClient = {
         exhaustiveNbHits: true,
         query: "",
         params: "",
-        facets: { year: counts, hasImage: { 1: 1234, 0: 56 } },
+        facets: {
+          year: counts,
+          hasImage: { 1: 1234, 0: 56 },
+          place: { Europe: 30, "Europe > France": 20, "Europe > Italy": 10, Asia: 5 },
+        },
         facets_stats: {
           year: { min: Math.min(...years), max: Math.max(...years), avg: 0, sum: 0 },
         },
