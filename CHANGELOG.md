@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.7.0
+
+- `HierarchyList`: `classNames` takes classes for the search box's form and
+  input and for "Show more", such as InstantSearch's satellite ones. The
+  component's own look for those is under `:where()`, so they win. The search
+  input now sits in a form.
+
 ## v0.6.0
 
 - `HierarchyList` (React) and `hierarchyList` (InstantSearch.js): a
