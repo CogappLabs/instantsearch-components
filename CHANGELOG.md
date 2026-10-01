@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.6.0
+
+- `HierarchyList` (React) and `hierarchyList` (InstantSearch.js): a
+  hierarchical facet over cumulative paths as nested checkboxes, any number
+  ticked at once, with a name search and "Show more" per branch. In both
+  script-tag builds, with `hierarchy-list.css` in the shared stylesheet, and
+  the path helpers (`withToggled`, `toggledIn`, `leafOf`, `parentOf`)
+  exported beside it.
+
 ## v0.5.1
 
 - `FacetToggle`: once ticked it showed 0, reading the empty entry

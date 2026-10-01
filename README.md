@@ -16,7 +16,7 @@ for collection search and kept here so more than one project can use them.
 Not on npm. Install a tagged release from GitHub, which npm builds on install:
 
 ```sh
-npm install github:CogappLabs/instantsearch-components#v0.5.1
+npm install github:CogappLabs/instantsearch-components#v0.6.0
 ```
 
 ```tsx
@@ -43,7 +43,7 @@ InstantSearch from a CDN:
   `cdn/react-instantsearch.min.js` adds `DateHistogram`.
 
 Both take `cdn/instantsearch-components.css`, e.g.
-`https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.5.1/cdn/instantsearch-js.min.js`.
+`https://cdn.jsdelivr.net/gh/CogappLabs/instantsearch-components@v0.6.0/cdn/instantsearch-js.min.js`.
 See [Script tags](https://cogapplabs.github.io/instantsearch-components/guides/script-tags/).
 
 ## Versions
