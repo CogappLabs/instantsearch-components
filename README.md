@@ -11,6 +11,7 @@ for collection search and kept here so more than one project can use them.
 | [`FacetToggle`](https://cogapplabs.github.io/instantsearch-components/components/facet-toggle/) | A boolean field as one checkbox, counted from Elasticsearch's `1` bucket. |
 | [`HierarchyList`](https://cogapplabs.github.io/instantsearch-components/components/hierarchy-list/) | A hierarchical facet as nested checkboxes, any number ticked at once. |
 | [`ReadableRefinements`](https://cogapplabs.github.io/instantsearch-components/components/readable-refinements/) | InstantSearch's `CurrentRefinements`, with chips that read as these components set them. |
+| [`StartingPoints`](https://cogapplabs.github.io/instantsearch-components/components/starting-points/) | Suggested searches as cards, shown while nothing is searched or refined. |
 
 ## Install
 

@@ -1,0 +1,108 @@
+---
+title: StartingPoints
+description: Suggested searches as cards, shown while nothing is searched or refined.
+---
+
+import StartingPointsDemo from "../../../components/StartingPointsDemo.tsx";
+
+Cards for an empty search page, each starting a search: a place, a period,
+"only records with images". They show only while there is no query and no
+refinement, so they go once a search starts and come back after "Clear all".
+
+<StartingPointsDemo client:load />
+
+The cards are the consumer's, typically from a CMS. Each one's `state` is
+routing's UI-state shape for the index, the same as a search page's URL, and
+is merged into the current state when the card is chosen, starting from the
+first page. A card with an `href` is a link instead, for a curated page. Every
+card has one or the other.
+
+## Setup
+
+A card's `state` only applies to a widget that is mounted: a
+`refinementList` key needs a refinement list on that attribute, a `toggle` key
+a toggle, and so on. A key with no widget behind it is dropped without a
+warning, and the card runs an unfiltered search. On a page whose facets mount
+only after the first results, mount them hidden, as the facets in a closed
+panel would be.
+
+Each component here takes the key of the widget underneath it:
+
+| Facet | `state` |
+| --- | --- |
+| HierarchyList, ColourList or a refinement list | `{ refinementList: { place: ["Asia > Japan"] } }` |
+| FacetToggle | `{ toggle: { has_image: true } }` |
+| DateHistogram or a range | `{ range: { year: "1760:1900" } }` |
+| An "exists" bound through `useNumericMenu` | `{ numericMenu: { image_width: "1:" } }` |
+
+An exists facet is a numeric menu, not a toggle, even where
+ReadableRefinements lists both as `flags`.
+
+## Usage
+
+### React
+
+```tsx
+import { StartingPoints } from "@cogapplabs/instantsearch-components/starting-points";
+import "@cogapplabs/instantsearch-components/starting-points.css";
+
+<StartingPoints
+  heading="Start exploring"
+  items={[
+    {
+      title: "Japan",
+      text: "Woodblock prints, ceramics and lacquer.",
+      image: { src: "/img/japan.jpg" },
+      count: 2210,
+      state: { refinementList: { place: ["Asia > Japan"] }, range: { year: "1760:1900" } },
+    },
+    { title: "With images", state: { toggle: { has_image: true } } },
+    { title: "Highlights", href: "/highlights" },
+  ]}
+/>
+```
+
+### InstantSearch.js
+
+With the [script-tag build](../../guides/script-tags/), it is a widget:
+
+```js
+search.addWidgets([
+  CogappInstantSearch.startingPoints({
+    container: "#starting-points",
+    items: [{ title: "With images", state: { toggle: { has_image: true } } }],
+  }),
+]);
+```
+
+## Props
+
+| Prop | Default | |
+| --- | --- | --- |
+| `items` | | The cards: `title`, either `state` or `href`, and optionally `text`, `image` (`{ src, alt }`) and `count`. |
+| `heading` | | Above the cards. None by default. |
+| `formatCount` | "1,204 records" | A card's count, words and all. |
+| `className` | | Added to the root beside `starting-points`. |
+| `classNames` | | `root`, `heading`, `list`, `item`, `card`, `image`, `title`, `text` and `count`: classes added beside the component's own, to match a theme's. |
+
+An image's `alt` defaults to empty, as the card's title already names it.
+
+A card's `count` is the consumer's: the component runs no query for it, so
+the cards cost nothing on first load. Fetch the counts with the cards, for
+example from one Elasticsearch request with a `filters` aggregation, a bucket
+per card.
+
+## Theming
+
+Every rule in the stylesheet is under `:where()`, so classes passed through
+`classNames` win over it.
+
+| Property | |
+| --- | --- |
+| `--starting-points-accent` | A card's border on hover, and the focus outline. |
+| `--starting-points-muted` | The cards' text. |
+| `--starting-points-border` | A card's border. |
+| `--starting-points-radius` | A card's corners. |
+| `--starting-points-gap` | Between the cards. |
+| `--starting-points-min-width` | The narrowest a card gets before the grid drops a column. |
+| `--starting-points-image-ratio` | An image's aspect ratio, `4 / 3` by default. |

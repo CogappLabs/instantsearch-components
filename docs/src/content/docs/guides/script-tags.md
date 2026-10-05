@@ -62,7 +62,8 @@ Our script can go before or after `instantsearch.js`: it looks InstantSearch.js
 up when `dateHistogram()` runs. `CogappInstantSearch.facetToggle({ container, attribute, label })` adds the
 boolean checkbox the same way, and `CogappInstantSearch.hierarchyList({ container, attribute })` the
 hierarchy. `CogappInstantSearch.readableRefinements({ setUiState: (u) => search.setUiState(u) })`
-is a `transformItems` for InstantSearch.js's own `currentRefinements` widget. `container` takes an element or a selector, and every other option is a
+is a `transformItems` for InstantSearch.js's own `currentRefinements` widget, and
+`CogappInstantSearch.startingPoints({ container, items })` adds the suggested searches. `container` takes an element or a selector, and every other option is a
 prop from the [component page](../../components/date-histogram/). The script
 also sets a `dateHistogram` global, unless the page has one already.
 
