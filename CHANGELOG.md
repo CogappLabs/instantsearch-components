@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.9.0
+
+- `StartingPoints` (React) and `startingPoints` (InstantSearch.js): suggested
+  searches as cards, shown while there is no query and no refinement. A card
+  applies its UI state from the first page, or links out, and can carry a
+  count. In both script-tag builds, with `starting-points.css` in the shared
+  stylesheet.
+
 ## v0.8.0
 
 - `ReadableRefinements` (React) and `readableRefinements` (a `transformItems`
