@@ -1,0 +1,75 @@
+---
+title: ReadableRefinements
+description: Chips that read as the components that set them, for InstantSearch's CurrentRefinements.
+---
+
+InstantSearch's own `CurrentRefinements`, with chips that read as the
+components here set them:
+
+| Refinement | InstantSearch shows | With this |
+| --- | --- | --- |
+| A DateHistogram range | `year: ≥ 1800` `≤ 1850`, two chips | `Date: 1800 to 1850`, one chip whose ✕ clears both |
+| One bound | `year: ≥ 1800` | `Date: from 1800` |
+| A flag, such as a FacetToggle | `has_image: true` | `Has image: Yes` |
+| A HierarchyList path | `place: Europe > France > Paris` | `Place: Paris` |
+
+The markup, classes and `classNames` stay InstantSearch's, so a site's theme
+for `CurrentRefinements` and its `ClearRefinements` button carry on working.
+The widget always prints a heading before the chip, which is why a flag
+reads "Has image: Yes" rather than "Has image" alone.
+
+## Usage
+
+### React
+
+`ReadableRefinements` takes every `CurrentRefinements` prop, `classNames`
+among them, plus the options below:
+
+```tsx
+import { ReadableRefinements } from "@cogapplabs/instantsearch-components/readable-refinements";
+
+<ReadableRefinements
+  headings={{ year: "Date", has_image: "Has image", place: "Place" }}
+  flags={["has_image"]}
+  paths={["place"]}
+  classNames={{ item: "my-chip" }}
+/>
+```
+
+### InstantSearch.js
+
+With the [script-tag build](../../guides/script-tags/), `readableRefinements`
+is a `transformItems` for InstantSearch.js's own widget. Pass the instance's
+`setUiState`, so a range's ✕ clears both bounds in one search:
+
+```js
+search.addWidgets([
+  instantsearch.widgets.currentRefinements({
+    container: "#refinements",
+    transformItems: CogappInstantSearch.readableRefinements({
+      headings: { year: "Date" },
+      setUiState: (update) => search.setUiState(update),
+    }),
+  }),
+]);
+```
+
+Without `setUiState` each bound is removed on its own, and the first of the
+two searches goes out with half the range.
+
+## Options
+
+| Option | Default | |
+| --- | --- | --- |
+| `headings` | | Each attribute's name on its chips. Unlisted attributes show their own name. |
+| `flags` | `[]` | Attributes that are on or off, such as a toggle or an "exists" bound (`width >= 1`), whose chip reads `yes` whatever it filters on. |
+| `paths` | `[]` | Attributes holding cumulative paths, whose chips name only the leaf. |
+| `separator` | `" > "` | Between a path's steps. |
+| `formatNumber` | `String` | A range's bounds, given the value and the attribute, such as a year before 0 as "500 BC". |
+| `labels` | English | `yes`, and `range(from, to)`, `from(from)` and `upTo(to)` for ranges. |
+| `setUiState` | | `readableRefinements` only: the instance's `setUiState`. `ReadableRefinements` wires it itself. |
+
+Only `>=` and `<=` bounds are joined. Clearing them clears the attribute's
+`range` and `numericMenu` UI state, so the bounds should come from a range
+widget such as DateHistogram or from a numeric menu. Other refinements keep
+InstantSearch's own label.
