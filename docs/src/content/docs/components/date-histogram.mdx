@@ -16,12 +16,13 @@ Every demo on this page runs the real component against a made-up collection
 in the browser, so the handles and year boxes work. The line under each shows
 the refinement it would send.
 
-## Usage with Searchkit
+## Setup
 
-Searchkit runs InstantSearch against Elasticsearch or OpenSearch. The
-component needs one numeric field holding a year per record.
+The component needs one numeric field holding a year per record.
 
-### Elasticsearch document
+### Searchkit
+
+Searchkit runs InstantSearch against Elasticsearch or OpenSearch.
 
 ```json
 {
@@ -33,8 +34,6 @@ component needs one numeric field holding a year per record.
 `date_start` is mapped as a number (`long` or `integer`). A `keyword` holding
 digits facets as text and gives no stats, so the component draws nothing.
 For a record dated across years, see [Range fields](#range-fields).
-
-### Searchkit setup
 
 Give the field `type: "numeric"` in `facet_attributes`, which makes Searchkit
 ask for its stats and per-value counts:
@@ -59,13 +58,26 @@ To keep the connection details off the page, run Searchkit on the server with
 `@searchkit/api` behind an API route and point `@searchkit/instantsearch-client`
 at that URL; the component is the same either way.
 
+### Algolia
+
+Store the year as a number, list the attribute in `attributesForFaceting`, and
+pass an Algolia client as the search client:
+
+```ts
+import { liteClient } from "algoliasearch/lite";
+
+export const searchClient = liteClient("APP_ID", "SEARCH_KEY");
+```
+
+## Usage
+
 ### React
 
 ```tsx
 import { InstantSearch } from "react-instantsearch";
 import { DateHistogram } from "@cogapplabs/instantsearch-components/date-histogram";
 import "@cogapplabs/instantsearch-components/date-histogram.css";
-import { searchClient } from "./searchkit";
+import { searchClient } from "./search-client";
 
 export const Search = () => (
   <InstantSearch searchClient={searchClient} indexName="collection">
@@ -74,15 +86,18 @@ export const Search = () => (
 );
 ```
 
-## Usage with Algolia
+### InstantSearch.js
 
-List the attribute in `attributesForFaceting`, store it as a number, and pass
-an Algolia client instead:
+With the [script-tag build](../../guides/script-tags/), it is a widget:
 
-```tsx
-import { liteClient } from "algoliasearch/lite";
-
-const searchClient = liteClient("APP_ID", "SEARCH_KEY");
+```js
+search.addWidgets([
+  CogappInstantSearch.dateHistogram({
+    container: "#date",
+    attribute: "date_start",
+    labels: { group: "Date" },
+  }),
+]);
 ```
 
 ## What the attribute needs
