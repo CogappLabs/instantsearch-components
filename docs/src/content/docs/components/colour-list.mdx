@@ -1,0 +1,79 @@
+---
+title: ColourList
+description: A colour facet as swatches, any number ticked at once.
+---
+
+import ColourDemo from "../../../components/ColourDemo.tsx";
+
+A refinement list over a colour field, with a swatch, name and count for each
+value. Any number can be ticked, and they are ORed.
+
+<ColourDemo client:load />
+
+Each swatch's colour comes from the `colours` map, keyed by facet value. A
+value missing from the map is tried as a CSS colour itself, so `red` or
+`teal` need no entry. One the browser cannot read, such as "Mixed", gets a
+hatched empty swatch.
+
+## Setup
+
+### Searchkit
+
+A `keyword` field holding the colour names, as a `string` facet:
+
+```ts
+facet_attributes: [{ attribute: "colour", field: "colour", type: "string" }];
+```
+
+### Algolia
+
+An attribute holding the colour names, listed in `attributesForFaceting`.
+
+## Usage
+
+### React
+
+```tsx
+import { ColourList } from "@cogapplabs/instantsearch-components/colour-list";
+import "@cogapplabs/instantsearch-components/colour-list.css";
+
+<ColourList attribute="colour" colours={{ Navy: "#000080", Ochre: "#cc7722" }} />
+```
+
+### InstantSearch.js
+
+With the [script-tag build](../../guides/script-tags/), it is a widget:
+
+```js
+search.addWidgets([
+  CogappInstantSearch.colourList({
+    container: "#colour",
+    attribute: "colour",
+    colours: { Navy: "#000080", Ochre: "#cc7722" },
+  }),
+]);
+```
+
+## Props
+
+| Prop | Default | |
+| --- | --- | --- |
+| `attribute` | | The facet holding the colour names. |
+| `colours` | | A CSS colour per facet value. Values not in it are tried as colours themselves. |
+| `limit` | `20` | Colours shown, most records first. |
+| `formatCount` | English digits | A colour's count. |
+| `className` | | Added to the root beside `colour-list`. |
+
+## Theming
+
+| Property | |
+| --- | --- |
+| `--colour-list-accent` | The ring round a ticked swatch, and the focus outline. |
+| `--colour-list-muted` | The counts. |
+| `--colour-list-border` | Each swatch's edge, so white shows on white. |
+| `--colour-list-size` | A swatch's width and height. |
+| `--colour-list-radius` | A swatch's corners: `50%`, a circle, by default. |
+| `--colour-list-gap` | Between the colours. |
+
+The checkboxes are hidden but kept, so the list works from the keyboard and
+reads as checkboxes to a screen reader.

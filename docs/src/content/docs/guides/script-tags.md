@@ -60,8 +60,9 @@ React: the build carries Preact, a 4KB stand-in, to draw it.
 
 Our script can go before or after `instantsearch.js`: it looks InstantSearch.js
 up when `dateHistogram()` runs. `CogappInstantSearch.facetToggle({ container, attribute, label })` adds the
-boolean checkbox the same way, and `CogappInstantSearch.hierarchyList({ container, attribute })` the
-hierarchy. `container` takes an element or a selector, and every other option is a
+boolean checkbox the same way, `CogappInstantSearch.hierarchyList({ container, attribute })` the
+hierarchy, and `CogappInstantSearch.colourList({ container, attribute, colours })` the colour
+swatches. `container` takes an element or a selector, and every other option is a
 prop from the [component page](../../components/date-histogram/). The script
 also sets a `dateHistogram` global, unless the page has one already.
 

@@ -7,6 +7,7 @@ for collection search and kept here so more than one project can use them.
 
 | Component | |
 | --- | --- |
+| [`ColourList`](https://cogapplabs.github.io/instantsearch-components/components/colour-list/) | A colour facet as swatches, any number ticked at once. |
 | [`DateHistogram`](https://cogapplabs.github.io/instantsearch-components/components/date-histogram/) | A year range picked under a histogram of the records' years, or typed. |
 | [`FacetToggle`](https://cogapplabs.github.io/instantsearch-components/components/facet-toggle/) | A boolean field as one checkbox, counted from Elasticsearch's `1` bucket. |
 | [`HierarchyList`](https://cogapplabs.github.io/instantsearch-components/components/hierarchy-list/) | A hierarchical facet as nested checkboxes, any number ticked at once. |
