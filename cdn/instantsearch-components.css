@@ -1,3 +1,68 @@
+/* Themed by the --colour-list-* properties, set on .colour-list or any
+   ancestor; each falls back to a shade of currentColor or a system colour. */
+.colour-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--colour-list-gap, 0.5rem 1rem);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.colour-list-item {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.5rem;
+  position: relative;
+}
+/* The swatch shows the checkbox's state, so the box itself is hidden but
+   kept for keyboards and screen readers. */
+.colour-list-item input {
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+/* The inline background-color wins over this; an unreadable colour is
+   dropped from the inline style, leaving the hatching. */
+.colour-list-swatch {
+  background: repeating-linear-gradient(
+    45deg,
+    transparent 0 3px,
+    color-mix(in srgb, currentColor 25%, transparent) 3px 4px
+  );
+  border: 1px solid var(--colour-list-border, color-mix(in srgb, currentColor 30%, transparent));
+  border-radius: var(--colour-list-radius, 50%);
+  box-sizing: border-box;
+  flex: none;
+  height: var(--colour-list-size, 1.5rem);
+  width: var(--colour-list-size, 1.5rem);
+}
+.colour-list-item input:checked + .colour-list-swatch {
+  box-shadow:
+    0 0 0 2px Canvas,
+    0 0 0 4px var(--colour-list-accent, currentColor);
+}
+.colour-list-item input:focus-visible + .colour-list-swatch {
+  outline: 2px solid var(--colour-list-accent, currentColor);
+  outline-offset: 5px;
+}
+.colour-list-count {
+  color: var(--colour-list-muted, color-mix(in srgb, currentColor 70%, transparent));
+  font-size: 0.85em;
+  font-variant-numeric: tabular-nums;
+}
+.colour-list-count::before {
+  content: "(";
+}
+.colour-list-count::after {
+  content: ")";
+}
+
 /* Themed by the --date-histogram-* properties, set on .date-histogram or any
    ancestor; each falls back to a shade of currentColor or a system colour.
    Unlayered, so its one-class selectors beat a site's bare `input` rules; a

@@ -119,6 +119,26 @@ for (const { name, file } of pages) {
       await expect(page.getByRole("checkbox", { name: /France/ })).toBeHidden();
     });
 
+    test("paints colour swatches and filters on one", async ({ page }) => {
+      await open(page, file);
+      const navy = page.locator(".colour-list-item", { hasText: "Navy" });
+      await expect(navy.locator(".colour-list-swatch")).toHaveCSS(
+        "background-color",
+        "rgb(0, 0, 128)",
+      );
+      await navy.click();
+      await expect
+        .poll(() =>
+          page.evaluate(() =>
+            (window as unknown as { facetSearches: string[] }).facetSearches.some((f) =>
+              f.includes("colour:Navy"),
+            ),
+          ),
+        )
+        .toBe(true);
+      await expect(page.getByRole("checkbox", { name: /Navy/ })).toBeChecked();
+    });
+
     test("filters from a handle moved by keyboard", async ({ page }) => {
       await open(page, file);
       const to = page.getByRole("slider", { name: "To" });

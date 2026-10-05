@@ -24,6 +24,7 @@
           { searchClient: fakeClient, indexName: "demo" },
           h(FacetToggle, { attribute: "hasImage", label: "Has image" }),
           h(HierarchyList, { attribute: "place" }),
+          h(ColourList, { attribute: "colour", colours: { Navy: "#000080" } }),
           h(DateHistogram, { attribute: "year", labels: { group: "Date" } }),
         ),
       );

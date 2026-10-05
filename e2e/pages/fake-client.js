@@ -24,6 +24,7 @@ window.fakeClient = {
         facets: {
           year: counts,
           hasImage: { 1: 1234, 0: 56 },
+          colour: { Navy: 12, red: 9 },
           place: { Europe: 30, "Europe > France": 20, "Europe > Italy": 10, Asia: 5 },
         },
         facets_stats: {

@@ -63,6 +63,14 @@
     "./hierarchy-list.css": {
       "types": "./dist/hierarchy-list/hierarchy-list.css.d.ts",
       "default": "./dist/hierarchy-list/hierarchy-list.css"
+    },
+    "./colour-list": {
+      "types": "./dist/colour-list/index.d.ts",
+      "import": "./dist/colour-list/index.js"
+    },
+    "./colour-list.css": {
+      "types": "./dist/colour-list/colour-list.css.d.ts",
+      "default": "./dist/colour-list/colour-list.css"
     }
   },
   "files": [
