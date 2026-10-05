@@ -71,6 +71,8 @@ await build({
           }
           return found;
         };
+        export const connectCurrentRefinements = (...args) =>
+          connectors().connectCurrentRefinements(...args);
         export const connectRange = (...args) => connectors().connectRange(...args);
         export const connectRefinementList = (...args) =>
           connectors().connectRefinementList(...args);

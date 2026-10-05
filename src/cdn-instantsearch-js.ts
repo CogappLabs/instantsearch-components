@@ -10,12 +10,14 @@ import { facetToggle } from "./facet-toggle/widget.js";
 import { leafOf, withToggled } from "./hierarchy-list/paths.js";
 import { hierarchyList } from "./hierarchy-list/widget.js";
 import { readableRefinements } from "./readable-refinements/refinements.js";
+import { startingPoints } from "./starting-points/widget.js";
 
 const page = window as unknown as Record<string, unknown>;
 page.CogappInstantSearch = {
   dateHistogram,
   facetToggle,
   hierarchyList,
+  startingPoints,
   binValues,
   nearestEdge,
   ticksFor,
@@ -28,3 +30,4 @@ page.CogappInstantSearch = {
 page.dateHistogram ??= dateHistogram;
 page.facetToggle ??= facetToggle;
 page.hierarchyList ??= hierarchyList;
+page.startingPoints ??= startingPoints;

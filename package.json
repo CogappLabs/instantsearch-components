@@ -67,6 +67,14 @@
     "./readable-refinements": {
       "types": "./dist/readable-refinements/index.d.ts",
       "import": "./dist/readable-refinements/index.js"
+    },
+    "./starting-points": {
+      "types": "./dist/starting-points/index.d.ts",
+      "import": "./dist/starting-points/index.js"
+    },
+    "./starting-points.css": {
+      "types": "./dist/starting-points/starting-points.css.d.ts",
+      "default": "./dist/starting-points/starting-points.css"
     }
   },
   "files": [

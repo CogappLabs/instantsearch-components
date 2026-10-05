@@ -10,12 +10,17 @@
   </head>
   <body>
     <div id="refinements"></div>
+    <div id="starting"></div>
     <div id="toggle"></div>
     <div id="place"></div>
     <div id="search"></div>
     <script>
       const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
       search.addWidgets([
+        CogappInstantSearch.startingPoints({
+          container: "#starting",
+          items: [{ title: "Has an image", text: "Records you can see.", state: { toggle: { hasImage: true } } }],
+        }),
         instantsearch.widgets.currentRefinements({
           container: "#refinements",
           transformItems: CogappInstantSearch.readableRefinements({

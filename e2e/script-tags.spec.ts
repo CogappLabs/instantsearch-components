@@ -138,6 +138,14 @@ for (const { name, file } of pages) {
       expect((await searches()).slice(before).every((f) => f.length === 0)).toBe(true);
     });
 
+    test("starts a search from a starting point, then hides it", async ({ page }) => {
+      await open(page, file);
+      const card = page.getByRole("button", { name: /Has an image/ });
+      await card.click();
+      await expect(page.getByRole("checkbox", { name: /Has image/ })).toBeChecked();
+      await expect(card).toBeHidden();
+    });
+
     test("filters from a handle moved by keyboard", async ({ page }) => {
       await open(page, file);
       const to = page.getByRole("slider", { name: "To" });

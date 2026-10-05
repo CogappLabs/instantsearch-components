@@ -19,6 +19,9 @@
         h(
           ReactInstantSearch.InstantSearch,
           { searchClient: fakeClient, indexName: "demo" },
+          h(StartingPoints, {
+            items: [{ title: "Has an image", text: "Records you can see.", state: { toggle: { hasImage: true } } }],
+          }),
           h(ReadableRefinements, { headings: { year: "Date" } }),
           h(FacetToggle, { attribute: "hasImage", label: "Has image" }),
           h(HierarchyList, { attribute: "place" }),
