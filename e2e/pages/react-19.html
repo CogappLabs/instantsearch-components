@@ -22,6 +22,7 @@
         h(
           ReactInstantSearch.InstantSearch,
           { searchClient: fakeClient, indexName: "demo" },
+          h(ReadableRefinements, { headings: { year: "Date" } }),
           h(FacetToggle, { attribute: "hasImage", label: "Has image" }),
           h(HierarchyList, { attribute: "place" }),
           h(DateHistogram, { attribute: "year", labels: { group: "Date" } }),

@@ -12,3 +12,4 @@ page.CogappInstantSearch = components;
 page.DateHistogram ??= components.DateHistogram;
 page.FacetToggle ??= components.FacetToggle;
 page.HierarchyList ??= components.HierarchyList;
+page.ReadableRefinements ??= components.ReadableRefinements;

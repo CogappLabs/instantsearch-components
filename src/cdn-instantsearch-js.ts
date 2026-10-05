@@ -9,6 +9,7 @@ import { toggleCount } from "./facet-toggle/count.js";
 import { facetToggle } from "./facet-toggle/widget.js";
 import { leafOf, withToggled } from "./hierarchy-list/paths.js";
 import { hierarchyList } from "./hierarchy-list/widget.js";
+import { readableRefinements } from "./readable-refinements/refinements.js";
 
 const page = window as unknown as Record<string, unknown>;
 page.CogappInstantSearch = {
@@ -21,6 +22,7 @@ page.CogappInstantSearch = {
   toggleCount,
   leafOf,
   withToggled,
+  readableRefinements,
 };
 // Only where the page has no global of that name already.
 page.dateHistogram ??= dateHistogram;

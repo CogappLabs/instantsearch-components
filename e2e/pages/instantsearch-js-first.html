@@ -9,12 +9,20 @@
     <script src="/pages/fake-client.js"></script>
   </head>
   <body>
+    <div id="refinements"></div>
     <div id="toggle"></div>
     <div id="place"></div>
     <div id="search"></div>
     <script>
       const search = instantsearch({ indexName: "demo", searchClient: fakeClient });
       search.addWidgets([
+        instantsearch.widgets.currentRefinements({
+          container: "#refinements",
+          transformItems: CogappInstantSearch.readableRefinements({
+            headings: { year: "Date" },
+            setUiState: (update) => search.setUiState(update),
+          }),
+        }),
         CogappInstantSearch.facetToggle({ container: "#toggle", attribute: "hasImage", label: "Has image" }),
         CogappInstantSearch.hierarchyList({ container: "#place", attribute: "place" }),
         CogappInstantSearch.dateHistogram({

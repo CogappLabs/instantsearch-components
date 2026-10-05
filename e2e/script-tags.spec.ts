@@ -119,6 +119,25 @@ for (const { name, file } of pages) {
       await expect(page.getByRole("checkbox", { name: /France/ })).toBeHidden();
     });
 
+    test("shows a range as one chip that clears both bounds in one search", async ({ page }) => {
+      await open(page, file);
+      const boxes = page.locator(".date-histogram-form input");
+      await boxes.nth(0).fill("1800");
+      await boxes.nth(1).fill("1850");
+      await page.getByRole("button", { name: "Apply" }).click();
+      const chip = page.locator(".ais-CurrentRefinements-category");
+      await expect(chip).toHaveCount(1);
+      await expect(chip).toHaveText(/1800 to 1850/);
+      await expect(page.locator(".ais-CurrentRefinements-label")).toHaveText(/Date/);
+      const searches = () =>
+        page.evaluate(() => (window as unknown as { searches: string[][] }).searches);
+      const before = (await searches()).length;
+      await chip.getByRole("button").click();
+      await expect(chip).toHaveCount(0);
+      // A search with half the range would show here as ["year<=1850"].
+      expect((await searches()).slice(before).every((f) => f.length === 0)).toBe(true);
+    });
+
     test("filters from a handle moved by keyboard", async ({ page }) => {
       await open(page, file);
       const to = page.getByRole("slider", { name: "To" });

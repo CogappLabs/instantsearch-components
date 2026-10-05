@@ -63,6 +63,10 @@
     "./hierarchy-list.css": {
       "types": "./dist/hierarchy-list/hierarchy-list.css.d.ts",
       "default": "./dist/hierarchy-list/hierarchy-list.css"
+    },
+    "./readable-refinements": {
+      "types": "./dist/readable-refinements/index.d.ts",
+      "import": "./dist/readable-refinements/index.js"
     }
   },
   "files": [
