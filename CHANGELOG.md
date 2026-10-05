@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0
+
+- `ReadableRefinements` (React) and `readableRefinements` (a `transformItems`
+  for InstantSearch.js's `currentRefinements`): InstantSearch's own chips,
+  with headings per attribute, a range's two bounds as one chip cleared in one
+  search, flags read as "Yes", and paths named by their leaf. In both
+  script-tag builds.
+
 ## v0.7.0
 
 - `HierarchyList`: `classNames` takes classes for the search box's form and
