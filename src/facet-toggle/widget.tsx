@@ -1,7 +1,7 @@
 import type { Widget } from "instantsearch.js";
 import { connectToggleRefinement } from "instantsearch.js/es/connectors";
 import { createRoot } from "react-dom/client";
-import { toggleCount } from "./count.js";
+import { toggleCount, toggleIsEmpty } from "./count.js";
 import { type FacetToggleProps, FacetToggleView } from "./FacetToggleView.js";
 
 export interface FacetToggleWidgetOptions extends FacetToggleProps {
@@ -24,6 +24,7 @@ export const facetToggle = ({
   attribute,
   on = true,
   countOn,
+  hideEmpty,
   ...props
 }: FacetToggleWidgetOptions): Widget => {
   const el = typeof container === "string" ? document.querySelector(container) : container;
@@ -32,15 +33,18 @@ export const facetToggle = ({
   }
   const root = createRoot(el);
   let buckets: { name: string; count: number }[] | undefined;
-  const draw = (state: Toggle) =>
+  const draw = (state: Toggle) => {
+    const count = toggleCount(buckets, on, countOn);
     root.render(
       <FacetToggleView
         {...props}
         checked={state.value.isRefined}
-        count={toggleCount(buckets, on, countOn)}
+        count={count}
+        hidden={hideEmpty && toggleIsEmpty(buckets, state.value.isRefined, count)}
         onToggle={() => state.refine({ isRefined: state.value.isRefined })}
       />,
     );
+  };
   const toggle = connectToggleRefinement(draw)({ attribute, on }) as Widget;
 
   return {

@@ -9,7 +9,10 @@ import { facetToggle } from "./widget.js";
 type Request = { params?: { facetFilters?: unknown } };
 
 /** Answers with a boolean facet keyed as Searchkit keys Elasticsearch's. */
-const client = (log: Request[]) => ({
+const client = (
+  log: Request[],
+  facets: Record<string, Record<string, number>> = { hasImage: { "1": 1234, "0": 56 } },
+) => ({
   search: async (requests: Request[]) => {
     log.push(...requests);
     return {
@@ -23,7 +26,7 @@ const client = (log: Request[]) => ({
         exhaustiveNbHits: true,
         query: "",
         params: "",
-        facets: { hasImage: { "1": 1234, "0": 56 } },
+        facets,
       })),
     };
   },
@@ -61,6 +64,49 @@ describe("FacetToggle", () => {
   });
 });
 
+describe("FacetToggle hideEmpty", () => {
+  // Every record is false: the field has a 0 bucket and no 1.
+  const none = { hasImage: { "0": 56 } };
+
+  it("renders nothing when no record would match", async () => {
+    const log: Request[] = [];
+    render(
+      <InstantSearch searchClient={client(log, none) as never} indexName="records">
+        <FacetToggle attribute="hasImage" label="Has image" hideEmpty />
+      </InstantSearch>,
+    );
+    await waitFor(() => expect(log.length).toBeGreaterThan(0));
+    await waitFor(() => expect(screen.queryByRole("checkbox")).toBeNull());
+  });
+
+  it("still shows when ticked, so it can be unticked", async () => {
+    const log: Request[] = [];
+    render(
+      <InstantSearch
+        searchClient={client(log, none) as never}
+        indexName="records"
+        initialUiState={{ records: { toggle: { hasImage: true } } }}
+      >
+        <FacetToggle attribute="hasImage" label="Has image" hideEmpty />
+      </InstantSearch>,
+    );
+    const box = await screen.findByRole("checkbox", { name: /Has image/ });
+    await waitFor(() => expect(log.length).toBeGreaterThan(0));
+    expect((box as HTMLInputElement).checked).toBe(true);
+  });
+
+  it("shows without it, as before", async () => {
+    const log: Request[] = [];
+    render(
+      <InstantSearch searchClient={client(log, none) as never} indexName="records">
+        <FacetToggle attribute="hasImage" label="Has image" />
+      </InstantSearch>,
+    );
+    await waitFor(() => expect(log.length).toBeGreaterThan(0));
+    expect(await screen.findByRole("checkbox", { name: /Has image/ })).toBeTruthy();
+  });
+});
+
 describe("facetToggle widget", () => {
   it("counts from the 1 bucket and filters on true", async () => {
     const log: Request[] = [];
@@ -78,6 +124,23 @@ describe("facetToggle widget", () => {
       expect((container.querySelector("input") as HTMLInputElement).checked).toBe(true),
     );
     expect(container.querySelector(".facet-toggle-count")?.textContent).toBe("1,234");
+    search.dispose();
+  });
+
+  it("renders nothing with hideEmpty when no record would match", async () => {
+    const log: Request[] = [];
+    const container = document.createElement("div");
+    document.body.append(container);
+    const search = instantsearch({
+      indexName: "records",
+      searchClient: client(log, { hasImage: { "0": 56 } }) as never,
+    });
+    search.addWidgets([
+      facetToggle({ container, attribute: "hasImage", label: "Has image", hideEmpty: true }),
+    ]);
+    search.start();
+    await waitFor(() => expect(log.length).toBeGreaterThan(0));
+    await waitFor(() => expect(container.querySelector("input")).toBeNull());
     search.dispose();
   });
 

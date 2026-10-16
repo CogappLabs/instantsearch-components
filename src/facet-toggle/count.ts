@@ -32,3 +32,14 @@ export const toggleCount = (
   }
   return undefined;
 };
+
+/**
+ * Whether the toggle has nothing to offer: the results are in and its bucket
+ * is empty or absent. Before the first results `buckets` is undefined, so the
+ * toggle shows rather than appearing once they arrive.
+ */
+export const toggleIsEmpty = (
+  buckets: readonly FacetBucket[] | undefined,
+  checked: boolean,
+  count: number | undefined,
+): boolean => buckets !== undefined && !checked && !count;

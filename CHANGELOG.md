@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.10.0
+
+- `FacetToggle` and `facetToggle`: `hideEmpty` renders nothing once the
+  results are in and no record would match. A ticked toggle still shows.
+
 ## v0.9.0
 
 - `StartingPoints` (React) and `startingPoints` (InstantSearch.js): suggested
