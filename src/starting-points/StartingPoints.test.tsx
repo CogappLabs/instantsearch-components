@@ -122,6 +122,30 @@ describe("StartingPoints", () => {
     expect(link.className).toBe("starting-points-card");
   });
 
+  it("offers a surprise beside the heading, with no preview", async () => {
+    render(
+      <InstantSearch searchClient={client([]) as never} indexName="records">
+        <StartingPoints
+          items={items}
+          heading="Start here"
+          surprise={{ href: "/random" }}
+          classNames={{ surprise: "theme-surprise" }}
+        />
+      </InstantSearch>,
+    );
+    const link = await screen.findByRole("link", { name: "Surprise me" });
+    expect(link.getAttribute("href")).toBe("/random");
+    expect(link.className).toBe("starting-points-surprise theme-surprise");
+    expect(link.closest(".starting-points-header")?.textContent).toBe("Start hereSurprise me");
+    cleanup();
+    render(
+      <InstantSearch searchClient={client([]) as never} indexName="records">
+        <StartingPoints items={[]} surprise={{ href: "/random", label: "Random record" }} />
+      </InstantSearch>,
+    );
+    expect(await screen.findByRole("link", { name: "Random record" })).toBeTruthy();
+  });
+
   it("hides while there is a query", async () => {
     render(
       <InstantSearch searchClient={client([]) as never} indexName="records">

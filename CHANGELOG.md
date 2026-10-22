@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.11.0
+
+- `StartingPoints` and `startingPoints`: `surprise` adds a button beside the
+  heading that follows a link with no preview, for a route that picks a
+  record at random.
+
 ## v0.10.0
 
 - `FacetToggle` and `facetToggle`: `hideEmpty` renders nothing once the

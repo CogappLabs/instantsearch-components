@@ -81,9 +81,10 @@ search.addWidgets([
 | --- | --- | --- |
 | `items` | | The cards: `title`, either `state` or `href`, and optionally `text`, `image` (`{ src, alt }`) and `count`. |
 | `heading` | | Above the cards. None by default. |
+| `surprise` | | `{ href, label? }`: a button beside the heading, "Surprise me" by default, that follows `href` with no preview. Point it at a route that redirects to a record picked at random, so each click lands somewhere new. |
 | `formatCount` | "1,204 records" | A card's count, words and all. |
 | `className` | | Added to the root beside `starting-points`. |
-| `classNames` | | `root`, `heading`, `list`, `item`, `card`, `image`, `title`, `text` and `count`: classes added beside the component's own, to match a theme's. |
+| `classNames` | | `root`, `heading`, `list`, `item`, `card`, `image`, `title`, `text`, `count` and `surprise`: classes added beside the component's own, to match a theme's. |
 
 An image's `alt` defaults to empty, as the card's title already names it.
 
@@ -99,10 +100,10 @@ Every rule in the stylesheet is under `:where()`, so classes passed through
 
 | Property | |
 | --- | --- |
-| `--starting-points-accent` | A card's border on hover, and the focus outline. |
+| `--starting-points-accent` | A card's or the surprise button's border on hover, and the focus outline. |
 | `--starting-points-muted` | The cards' text. |
-| `--starting-points-border` | A card's border. |
-| `--starting-points-radius` | A card's corners. |
+| `--starting-points-border` | A card's and the surprise button's border. |
+| `--starting-points-radius` | A card's and the surprise button's corners. |
 | `--starting-points-gap` | Between the cards. |
 | `--starting-points-min-width` | The narrowest a card gets before the grid drops a column. |
 | `--starting-points-image-ratio` | An image's aspect ratio, `4 / 3` by default. |

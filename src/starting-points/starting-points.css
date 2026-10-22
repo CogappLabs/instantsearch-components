@@ -5,6 +5,33 @@
   font-size: 1.25em;
   margin: 0 0 0.75rem;
 }
+:where(.starting-points-header) {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  justify-content: space-between;
+  margin: 0 0 0.75rem;
+}
+:where(.starting-points-header .starting-points-heading) {
+  margin: 0;
+}
+:where(.starting-points-surprise) {
+  border: 1px solid var(--starting-points-border, color-mix(in srgb, currentColor 20%, transparent));
+  border-radius: var(--starting-points-radius, 0.5rem);
+  color: inherit;
+  font-size: 0.9em;
+  margin-left: auto;
+  padding: 0.375rem 0.75rem;
+  text-decoration: none;
+}
+:where(.starting-points-surprise:hover) {
+  border-color: var(--starting-points-accent, currentColor);
+}
+:where(.starting-points-surprise:focus-visible) {
+  outline: 2px solid var(--starting-points-accent, currentColor);
+  outline-offset: 2px;
+}
 :where(.starting-points-list) {
   display: grid;
   gap: var(--starting-points-gap, 1rem);

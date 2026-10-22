@@ -34,12 +34,19 @@ export interface StartingPointsClassNames {
   title: string;
   text: string;
   count: string;
+  surprise: string;
 }
 
 export interface StartingPointsProps {
   items: StartingPoint[];
   /** Above the cards, such as "Start exploring". None by default. */
   heading?: string;
+  /**
+   * A button beside the heading, such as "Surprise me", that follows `href`
+   * with no preview: the consumer's route picks a record when it is followed,
+   * so each click lands somewhere new.
+   */
+  surprise?: { href: string; label?: string };
   /** A card's count, words and all, as "1,204 records". */
   formatCount?: (count: number) => string;
   classNames?: Partial<StartingPointsClassNames>;
@@ -62,18 +69,32 @@ const withClass = (own: string, ...extra: (string | undefined)[]) =>
  */
 export const StartingPointsView = ({
   items,
+  surprise,
   heading,
   formatCount = records,
   classNames = {},
   className,
   onChoose,
 }: StartingPointsProps & { onChoose: (state: IndexUiState) => void }) => {
-  if (!items.length) return null;
+  if (!items.length && !surprise) return null;
+  const title = heading ? (
+    <h2 className={withClass("starting-points-heading", classNames.heading)}>{heading}</h2>
+  ) : null;
   return (
     <section className={withClass("starting-points", className, classNames.root)}>
-      {heading ? (
-        <h2 className={withClass("starting-points-heading", classNames.heading)}>{heading}</h2>
-      ) : null}
+      {surprise ? (
+        <div className="starting-points-header">
+          {title}
+          <a
+            className={withClass("starting-points-surprise", classNames.surprise)}
+            href={surprise.href}
+          >
+            {surprise.label ?? "Surprise me"}
+          </a>
+        </div>
+      ) : (
+        title
+      )}
       <ul className={withClass("starting-points-list", classNames.list)}>
         {items.map((item, i) => {
           const body = (
